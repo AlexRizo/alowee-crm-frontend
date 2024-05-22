@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: rgb(29, 30, 35);
+    color: white;
+}
+
+.my-color {
+    background-color: #252c36;
+}
+
+.rbc-off-range-bg {
+    background-color: #252c36 !important;
+}
+
+.rbc-today {
+    background-color: #252c36 !important;
+}
+
+.rbc-toolbar button {
+    color: rgb(140, 139, 139) !important;
+}
+
+.rbc-toolbar button:hover {
+    color: black !important;
+}
+
+.rbc-active {
+    color: black !important;
+}
+
+.rbc-timeslot-group, .rbc-time-slot {
+    border-color: rgba(255, 255, 255, 0.252) !important;
+}
