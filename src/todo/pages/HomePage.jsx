@@ -2,7 +2,7 @@ import { CardData, CardPending } from "../components"
 
 export const HomePage = () => {
     return (
-        <div className="p-10">
+        <>
             <div className="flex flex-row gap-5">
                 <CardData />
                 <CardPending />
@@ -10,6 +10,6 @@ export const HomePage = () => {
             <div>
 
             </div>
-        </div>
+        </>
     )
 }

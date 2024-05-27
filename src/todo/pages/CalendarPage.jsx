@@ -52,7 +52,7 @@ export const CalendarPage = () => {
             events={ events }
             startAccessor='start'
             endAccessor='end'
-            style={{ height: '100vh', width: '100%', color: 'white' }}
+            style={{ height: '100%', width: '100%', color: 'white' }}
             eventPropGetter={ eventStyleGetter }
             messages={ getMessagesES() }
             components={{

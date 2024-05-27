@@ -1,4 +1,4 @@
-import { CalendarPage, HomePage, RequestPage } from "../todo/pages";
+import { CalendarPage, EventRequestPage, HomePage, RequestPage } from "../todo/pages";
 import { TodoLayout } from "../todo/layout/TodoLayout";
 
 export const TodoRoutes = [
@@ -17,6 +17,10 @@ export const TodoRoutes = [
             {
                 path: '/requests',
                 element: <RequestPage />,
+            },
+            {
+                path: '/requests/new-event',
+                element: <EventRequestPage />
             }
         ]
     }

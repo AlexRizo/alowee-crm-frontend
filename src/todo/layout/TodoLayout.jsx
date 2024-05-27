@@ -6,7 +6,9 @@ export const TodoLayout = () => {
     return (
         <div className='flex flex-row'>
             <Navbar />
-            <Outlet />
+            <div className="p-10 md:p-5 w-full">
+                <Outlet />
+            </div>
         </div>
     )
 }

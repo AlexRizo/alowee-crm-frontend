@@ -37,3 +37,8 @@ body {
 .rbc-timeslot-group, .rbc-time-slot {
     border-color: rgba(255, 255, 255, 0.252) !important;
 }
+
+div:where(.swal2-container)
+div:where(.swal2-popu) {
+    background: #252c36 !important;
+}
