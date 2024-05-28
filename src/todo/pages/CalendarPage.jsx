@@ -1,20 +1,24 @@
-import { useState } from 'react'
-
 import { Calendar } from 'react-big-calendar'
-import { addHours } from "date-fns"
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { getMessagesES, localizer } from '../../helpers'
 import { CalendarEvent } from '../components'
+import { useEventStore, useUiStore } from '../../hooks'
+import { useState } from 'react'
 
 export const CalendarPage = () => {
+    const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'week' );
+    const { events, setActiveEvent } = useEventStore();
+    const { openModal } = useUiStore();
+    
     const onDoubleClick = (e) => {
-        console.log('onDoubleClick', e);
+        openModal();
     };
-    const onSelect = (e) => {
-        console.log('onSelect', e);
+    const onSelect = (event) => {
+        setActiveEvent(event)
     };
-    const onView = (e) => {
-        console.log('onView', e);
+    const onView = (event) => {
+        localStorage.setItem('lastView', event );
+        setLastView( event )
     };
     
     const eventStyleGetter = (event, start, end, isSelected) => {
@@ -29,26 +33,12 @@ export const CalendarPage = () => {
             style
         }
     };
-
-    const events = [
-        {
-            _id: new Date().getTime(),
-            title: 'Evento de prueba',
-            notes: 'Este es un evento de prueba',
-            start: new Date(),
-            end: addHours(new Date(), 2),
-            bgColor: '#fafafa',
-            user: {
-                _id: '123',
-                name: 'David'
-            }
-        }
-    ];
     
     return (
         <Calendar
             culture='es'
             localizer={ localizer }
+            defaultView={ lastView }
             events={ events }
             startAccessor='start'
             endAccessor='end'

@@ -1,5 +1,6 @@
 import { CalendarPage, EventRequestPage, HomePage, RequestPage } from "../todo/pages";
 import { TodoLayout } from "../todo/layout/TodoLayout";
+import { Navigate } from "react-router-dom";
 
 export const TodoRoutes = [
     {
@@ -23,5 +24,9 @@ export const TodoRoutes = [
                 element: <EventRequestPage />
             }
         ]
+    },
+    {
+        path: '/*',
+        element: <Navigate to={'/'} />
     }
 ]

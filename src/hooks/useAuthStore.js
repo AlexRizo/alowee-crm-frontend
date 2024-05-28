@@ -13,7 +13,7 @@ export const useAuthStore = () => {
             const { data } = await todoApi.post('/auth/login', { email, password });
             localStorage.setItem('token', data.tkn);
             localStorage.setItem('token-init-date', new Date().getTime());
-            dispatch(onLogin({ name: data.name, email: data.email }));
+            dispatch(onLogin({ uid: data.uid, name: data.name }));
         } catch (error) {
             console.log(error);
 
@@ -33,6 +33,21 @@ export const useAuthStore = () => {
         dispatch(onLogout());
     };
 
+    const checkAuthToken = async() => {
+        const token = localStorage.getItem('token');
+        if (!token) return dispatch(onLogout());
+
+        try {
+            const { data } = await todoApi.get('/auth/renew');
+            localStorage.setItem('token', data.tkn);
+            localStorage.setItem('token-init-date', new Date().getTime());
+            dispatch(onLogin({ uid: data.user.uid, name: data.user.name }));
+        } catch (error) {
+            console.log(error);
+            startLogout();
+        }
+    };
+
     return {
         // Properties
         status,
@@ -41,6 +56,7 @@ export const useAuthStore = () => {
 
         // Functions
         startLogin,
-        startLogout
+        startLogout,
+        checkAuthToken
     };
 };

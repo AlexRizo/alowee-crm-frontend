@@ -1,9 +1,9 @@
 import { AuthRoutes, TodoRoutes } from "./";
 
 export const AppRouter = (status = 'checking') => {
-    if (status === 'authenticated') {
-        return TodoRoutes;
-    } else {
+    if (status === 'not-authenticated') {
         return AuthRoutes;
+    } else {
+        return TodoRoutes;
     }
 };
