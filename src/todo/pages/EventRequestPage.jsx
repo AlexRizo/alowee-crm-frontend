@@ -1,17 +1,20 @@
+import { useEffect, useMemo, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker"
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
 import { addHours } from "date-fns";
-import { useEventStore, useAuthStore, useValidateForm } from "../../hooks";
+import { useEventStore, useAuthStore, useUiStore } from "../../hooks";
+import { fireModal } from "../../helpers";
 
 registerLocale('es', es);
 
 export const EventRequestPage = () => {
-    const { startSavingEvent } = useEventStore();
+    const { startSavingEvent, message } = useEventStore();
     const { user } = useAuthStore();
+    const { isCheckingForm } = useUiStore();
 
-    
+    const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);
+
     const [formValues, setFormValues] = useState({
         title: '',
         requiriments: [],
@@ -20,9 +23,15 @@ export const EventRequestPage = () => {
         description: '',
         user
     });
-    
-    const { formValidation, isFormValid, clearErrors } = useValidateForm(formValues);
 
+    const [formValidation, setFormValidation] = useState({
+        title: null,
+        start: null,
+        end: null,
+        requiriments: null,
+        description: null
+    });
+    
     const onInputChange = ({ target }) => {
         setFormValues({
             ...formValues,
@@ -56,49 +65,42 @@ export const EventRequestPage = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();
-        
-        // if (formValues.title.trim().length <= 3) {
-        //     setformValidation({
-        //         ...formValidation,
-        //         title: 'El título debe tener al menos 3 caracteres'
-        //     });
-        //     return;
-        // }
 
-        // if (formValues.start >= formValues.end) {
-        //     setformValidation({
-        //         ...formValidation,
-        //         start: 'La fecha de inicio no es válida',
-        //         end: 'La fecha de finalización no es válida'
-        //     });
-        //     return;
-        // }
+        const { title, start, end, requiriments, description } = formValues;
 
-        // if (formValues.requiriments.length === 0) {
-        //     setformValidation({
-        //         ...formValidation,
-        //         requiriments: 'Debes seleccionar al menos un requerimiento'
-        //     });
-        //     return;
-        // }
+        const errors = {
+            title: title.trim() === '' ? 'El título es obligatorio' : null,
+            start: start > end ? 'La fecha de inicio no puede ser mayor a la fecha de finalización' 
+                : !start ? 'La fecha de inicio es obligatoria'
+                : start < new Date() ? 'La fecha de inicio no puede ser menor a la fecha actual'
+                : null,
+            end: end < start ? 'La fecha de finalización no puede ser menor a la fecha de inicio'
+                : !end ? 'La fecha de finalización es obligatoria'
+                : null,
+            requiriments: requiriments.length === 0 ? 'Debes seleccionar al menos un requerimiento' : null,
+            description: description.trim() === '' ? 'La descripción es obligatoria' : null
+        }
 
-        // if (formValues.description.trim().length <= 3) {
-        //     setformValidation({
-        //         ...formValidation,
-        //         description: 'La descripción es obligatoria'
-        //     });
-        //     return;
-        // }
+        if (Object.values(errors).some(error => error !== null)) {
+            setFormValidation(errors);
+            return;
+        }
 
-
-        isFormValid();
-        
         startSavingEvent(formValues);
     }
 
     const cleanError = (target) => {
-        clearErrors(target);
+        setFormValidation({
+            ...formValidation,
+            [target]: null
+        });
     }
+
+    useEffect(() => {
+        if(message !== undefined) {
+            fireModal({ title: 'Ha ocurrido un error', text: message, icon: 'error' })
+        }
+    }, [message]);
     
     return (
         <>
@@ -122,6 +124,7 @@ export const EventRequestPage = () => {
                     <div className="flex flex-col gap-1 w-full">
                         <label htmlFor="start">Fecha de Inicio *</label> 
                         <DatePicker
+                            onBlur={() => cleanError('start')}
                             className={`w-full p-2 bg-violet-400/10 rounded border border-gray-400/10 focus:outline-none focus:ring focus:ring-violet-600 transition ${ !!formValidation.start && 'outline outline-red-500' }`}
                             placeholderText="Fecha de inicio del evento"
                             dateFormat='Pp'
@@ -136,6 +139,7 @@ export const EventRequestPage = () => {
                     <div className="flex flex-col gap-1 w-full">
                         <label htmlFor="end">Fecha de Finalización *</label> 
                         <DatePicker
+                            onBlur={() => cleanError('end')}
                             className={`w-full p-2 bg-violet-400/10 rounded border border-gray-400/10 focus:outline-none focus:ring focus:ring-violet-600 transition ${ !!formValidation.end && 'outline outline-red-500' }`}
                             placeholderText="Fecha de finalización del evento"
                             dateFormat='Pp'
@@ -172,6 +176,7 @@ export const EventRequestPage = () => {
                 <div className="flex flex-col gap-1 w-full">
                         <label htmlFor="description">Descripción de la Solicitud *</label> 
                         <textarea
+                            onBlur={ () => cleanError('description')}
                             className={`${ !!formValidation.description && 'outline outline-red-500' } p-2 bg-violet-400/10 rounded border border-gray-400/10 transition focus:outline-none focus:ring focus:ring-violet-600 resize-none`}
                             name="description"
                             id="description"
@@ -183,7 +188,7 @@ export const EventRequestPage = () => {
                         />
                         <p className={`text-red-500 text-sm transition ${!!formValidation.description ? '' : 'hidden' }`}>* { formValidation.description }</p>
                     </div>
-                    <button className="p-4 bg-violet-700 rounded hover:bg-violet-600 focus:bg-violet-800 transition">Enviar Solicitud</button>
+                    <button className="p-4 bg-violet-700 rounded hover:bg-violet-600 focus:bg-violet-800 transition" disabled={ isCheckingData } >Enviar Solicitud</button>
             </form>
         </>
     )

@@ -9,11 +9,9 @@ export const AloweeApp = () => {
 
     useEffect(() => {
       checkAuthToken();
-    }, [])
-    
+    }, []);
 
     if (status === 'checking') {
-        console.log(status);
         return (
             <h1>Cargando...</h1>
         )

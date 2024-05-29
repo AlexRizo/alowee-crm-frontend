@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { authSlice, eventSlice, uiSlice } from "./";
+import { authSlice, calendarSlice, uiSlice } from "./";
 
 export const store = configureStore({
     middleware: getDefaultMiddleware => getDefaultMiddleware(
@@ -10,7 +10,7 @@ export const store = configureStore({
     reducer: {
         // Here we will add our reducers
         auth: authSlice.reducer,
-        calendar: eventSlice.reducer,
+        calendar: calendarSlice.reducer,
         ui: uiSlice.reducer,
     }
 })

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     isModalOpen: false,
+    isCheckingForm: false,
 };
 
 export const uiSlice = createSlice({
@@ -14,7 +15,10 @@ export const uiSlice = createSlice({
         onCloseModal: (state) => {
             state.isModalOpen = false;
         },
+        onCheckingForm: (state) => {
+            state.isCheckingForm = !state.isCheckingForm;
+        },
     },
 });
 
-export const { onOpenModal, onCloseModal } = uiSlice.actions;
+export const { onOpenModal, onCloseModal, onCheckingForm } = uiSlice.actions;

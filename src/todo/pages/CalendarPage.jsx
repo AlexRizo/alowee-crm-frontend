@@ -3,11 +3,11 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { getMessagesES, localizer } from '../../helpers'
 import { CalendarEvent } from '../components'
 import { useEventStore, useUiStore } from '../../hooks'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const CalendarPage = () => {
     const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'week' );
-    const { events, setActiveEvent } = useEventStore();
+    const { events, setActiveEvent, startLoadingEvents } = useEventStore();
     const { openModal } = useUiStore();
     
     const onDoubleClick = (e) => {
@@ -33,24 +33,31 @@ export const CalendarPage = () => {
             style
         }
     };
+
+    useEffect(() => {
+        startLoadingEvents();
+    }, []);
     
     return (
-        <Calendar
-            culture='es'
-            localizer={ localizer }
-            defaultView={ lastView }
-            events={ events }
-            startAccessor='start'
-            endAccessor='end'
-            style={{ height: '100%', width: '100%', color: 'white' }}
-            eventPropGetter={ eventStyleGetter }
-            messages={ getMessagesES() }
-            components={{
-                event: CalendarEvent
-            }}
-            onDoubleClickEvent={ onDoubleClick }
-            onSelectEvent={ onSelect }
-            onView={ onView }
-        />
+        <div className='h-full max-h-full'>
+            <Calendar
+                culture='es'
+                localizer={ localizer }
+                defaultView={ lastView }
+                events={ events }
+                startAccessor='start'
+                endAccessor='end'
+                style={{ height: '100%', width: '100%', color: 'white' }}
+                eventPropGetter={ eventStyleGetter }
+                messages={ getMessagesES() }
+                components={{
+                    event: CalendarEvent
+                }}
+                onDoubleClickEvent={ onDoubleClick }
+                onSelectEvent={ onSelect }
+                onView={ onView }
+            />
+        </div>
+
     )
 }
