@@ -13,7 +13,18 @@ export const useAuthStore = () => {
             const { data } = await todoApi.post('/auth/login', { email, password });
             localStorage.setItem('token', data.tkn);
             localStorage.setItem('token-init-date', new Date().getTime());
-            dispatch(onLogin({ uid: data.uid, name: data.name }));
+            console.log(data);
+            dispatch(onLogin({
+                user: {
+                    uid: data.user.uid,
+                    name: data.user.name,
+                },
+                team: {
+                    tid: data.team.tid,
+                    team: data.team.name,
+                    color: data.team.color
+                }
+            }));
         } catch (error) {
             console.error({ error });
 
@@ -41,7 +52,17 @@ export const useAuthStore = () => {
             const { data } = await todoApi.get('/auth/renew');
             localStorage.setItem('token', data.tkn);
             localStorage.setItem('token-init-date', new Date().getTime());
-            dispatch(onLogin({ uid: data.user.uid, name: data.user.name }));
+            dispatch(onLogin({
+                user: {
+                    uid: data.user.uid,
+                    name: data.user.name,
+                },
+                team: {
+                    tid: data.team.tid,
+                    team: data.team.name,
+                    color: data.team.color
+                }
+            }));
         } catch (error) {
             console.error({ error });
             startLogout();

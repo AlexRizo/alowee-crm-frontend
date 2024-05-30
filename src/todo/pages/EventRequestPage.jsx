@@ -3,14 +3,13 @@ import DatePicker, { registerLocale } from "react-datepicker"
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
 import { addHours } from "date-fns";
-import { useEventStore, useAuthStore, useUiStore } from "../../hooks";
+import { useEventStore, useUiStore } from "../../hooks";
 import { fireModal } from "../../helpers";
 
 registerLocale('es', es);
 
 export const EventRequestPage = () => {
     const { startSavingEvent, message } = useEventStore();
-    const { user } = useAuthStore();
     const { isCheckingForm } = useUiStore();
 
     const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);
@@ -21,7 +20,7 @@ export const EventRequestPage = () => {
         start: new Date(),
         end: addHours(new Date(), 2),
         description: '',
-        user
+        status: false
     });
 
     const [formValidation, setFormValidation] = useState({
@@ -165,7 +164,7 @@ export const EventRequestPage = () => {
                     </div>
                     <div className="flex gap-2">
                         <input onClick={ () => cleanError('requiriments') } type="checkbox" name="Reel" id="Reel" value="reel" onChange={ onCheckboxChange } />
-                        <label htmlFor="Reel" className="mr-2 text-gray-300">Fotografía</label>
+                        <label htmlFor="Reel" className="mr-2 text-gray-300">Reel</label>
                     </div>
                     <div className="flex gap-2">
                         <input onClick={ () => cleanError('requiriments') } type="checkbox" name="Transmicion" id="Transmicion" value="transmicion" onChange={ onCheckboxChange } />

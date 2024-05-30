@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     events: [],
+    latestEvents: [],
     isLoadingEvents: true,
     activeEvent: null,
     message: undefined 
@@ -41,7 +42,20 @@ export const calendarSlice = createSlice({
             //     }
             // });
         },
+        onLoadlatestEvents: (state, { payload = [] }) => {
+            state.isLoadingEvents = false;
+            state.latestEvents = payload;
+        }
     },
 });
 
-export const { onAddNewEvent, onUpdateEvent, onDeleteEvent, onSetActiveEvent, onErrorResponse, clearMessage, onLoadEvents } = calendarSlice.actions;
+export const {
+    onAddNewEvent,
+    onUpdateEvent,
+    onDeleteEvent,
+    onSetActiveEvent,
+    onErrorResponse,
+    clearMessage,
+    onLoadEvents,
+    onLoadlatestEvents
+} = calendarSlice.actions;

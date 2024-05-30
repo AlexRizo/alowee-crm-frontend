@@ -16,16 +16,6 @@ Modal.setAppElement('#root');
 
 export const CalendarEventModal = () => {
     const { isModalOpen, closeModal } = useUiStore();
-
-    const [formValues, setFormValues] = useState({
-        title: '',
-        notes: '',
-        start: '',
-        end: '',
-        user: {
-            name: ''
-        }
-    });
     
     return (
         <Modal

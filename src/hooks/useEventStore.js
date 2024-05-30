@@ -1,11 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import { clearMessage, onAddNewEvent, onCheckingForm, onDeleteEvent, onErrorResponse, onLoadEvents, onSetActiveEvent, onUpdateEvent } from "../store";
+import { useNavigate } from "react-router-dom";
+import { clearMessage, onAddNewEvent, onCheckingForm, onDeleteEvent, onErrorResponse, onLoadEvents, onLoadlatestEvents, onSetActiveEvent, onUpdateEvent } from "../store";
 import { todoApi } from "../api";
 import { convertDateEvent, fireModal } from "../helpers";
 
 export const useEventStore = () => {
     const dispatch = useDispatch();
-    const { events, activeEvent, message } = useSelector(state => state.calendar);
+    const navigate = useNavigate();
+    
+    const { events, latestEvents, activeEvent, message } = useSelector(state => state.calendar);
+    const { user } = useSelector(state => state.auth);
 
     const setActiveEvent = (calendarEvent) => {
         dispatch(onSetActiveEvent(calendarEvent));
@@ -21,13 +25,13 @@ export const useEventStore = () => {
             // Create
             try {
                 const { data } = await todoApi.post('/events/new-event-req', eventData);
-                console.log(data);
-                dispatch(onAddNewEvent({ id: data.event.id, ...eventData }));
+                dispatch(onAddNewEvent({ id: data.event.id, ...eventData, user, status: false }));
                 fireModal({
                     title: 'Evento creado',
                     text: 'El evento ha sido creado y enviado para su revisión. Pronto recibirás una respuesta.',
                     icon: 'success'
                 });
+                navigate('/calendar');
             } catch (error) {
                 console.log(error);
                 dispatch(onErrorResponse(error.response.data?.message ||
@@ -53,6 +57,16 @@ export const useEventStore = () => {
         }
     };
 
+    const startLoadingLatestEvents = async() => {
+        try {
+            const { data } = await todoApi.get('/events?limit=3');
+            const events = convertDateEvent(data.events);
+            dispatch(onLoadlatestEvents(events));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const startDeletingEvent = () => {
         dispatch(onDeleteEvent());
     };
@@ -60,6 +74,7 @@ export const useEventStore = () => {
     return {
         // Properties
         events,
+        latestEvents,
         activeEvent,
         message,
         hasEventSelected: !!activeEvent,
@@ -68,6 +83,7 @@ export const useEventStore = () => {
         setActiveEvent,
         startSavingEvent,
         startDeletingEvent,
-        startLoadingEvents
+        startLoadingEvents,
+        startLoadingLatestEvents
     };
 };

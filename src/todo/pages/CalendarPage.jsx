@@ -4,11 +4,13 @@ import { getMessagesES, localizer } from '../../helpers'
 import { CalendarEvent } from '../components'
 import { useEventStore, useUiStore } from '../../hooks'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 export const CalendarPage = () => {
     const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'week' );
     const { events, setActiveEvent, startLoadingEvents } = useEventStore();
     const { openModal } = useUiStore();
+    const { team, user } = useSelector(state => state.auth);
     
     const onDoubleClick = (e) => {
         openModal();
@@ -23,7 +25,7 @@ export const CalendarPage = () => {
     
     const eventStyleGetter = (event, start, end, isSelected) => {
         const style = {
-            backgroundColor: '#367CF7',
+            backgroundColor: user.uid === event.user._id ? team.color : '#465660',
             borderRadius: '0px',
             opacity: 0.8,
             color: 'white'
