@@ -28,8 +28,8 @@ export const useAuthStore = () => {
         } catch (error) {
             console.error({ error });
 
-            dispatch(onLogout(error.response.data?.message ||
-                Object.values(error.response.data?.errors).map((error) => error.msg).join('<br/>') ||
+            dispatch(onLogout(error.response?.data?.message ||
+                Object.values(error.response?.data?.errors).map((error) => error.msg).join('<br/>') ||
                 'Error desconocido'
             ));
 

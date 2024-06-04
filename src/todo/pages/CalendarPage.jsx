@@ -27,7 +27,7 @@ export const CalendarPage = () => {
         const style = {
             backgroundColor: user.uid === event.user._id ? team.color : '#465660',
             borderRadius: '0px',
-            opacity: 0.8,
+            opacity: .9,
             color: 'white'
         }
     

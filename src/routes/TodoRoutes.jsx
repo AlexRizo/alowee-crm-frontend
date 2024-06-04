@@ -1,4 +1,4 @@
-import { CalendarPage, EventRequestPage, HomePage, RequestPage } from "../todo/pages";
+import { CalendarPage, EventRequestPage, HomePage, PostRequestPage, RequestPage } from "../todo/pages";
 import { TodoLayout } from "../todo/layout/TodoLayout";
 import { Navigate } from "react-router-dom";
 
@@ -22,6 +22,10 @@ export const TodoRoutes = [
             {
                 path: '/requests/new-event',
                 element: <EventRequestPage />
+            },
+            {
+                path: '/requests/new-post/',
+                element: <PostRequestPage />
             }
         ]
     },

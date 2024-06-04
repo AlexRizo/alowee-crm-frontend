@@ -16,7 +16,7 @@ export const RequestPage = () => {
                     </div>
                 </div>
             </NavLink>
-            <div className='bg-gray-500/10 rounded cursor-pointer hover:bg-blue-600 transition'>
+            <NavLink to={'/requests/new-post'} className='bg-gray-500/10 rounded cursor-pointer hover:bg-blue-600 transition'>
                 <div className="p-5 w-full flex gap-2 items-center">
                     <div className='rounded-full p-5 bg-violet-400/20 w-min'>
                         <PaintBrushIcon className='h-8 w-8 text-white' />
@@ -26,7 +26,7 @@ export const RequestPage = () => {
                         <p className='text-gray-300'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus quas qui voluptas saepe. Laborum cupiditate est sed incidunt aliquam delectus quibusdam quo dolores exercitationem culpa. Ducimus est placeat quaerat mollitia.</p>
                     </div>
                 </div>
-            </div>
+            </NavLink>
             <div className='bg-gray-500/10 rounded cursor-pointer hover:bg-orange-700 transition'>
                 <div className="p-5 w-full flex gap-2 items-center">
                     <div className='rounded-full p-5 bg-violet-400/20 w-min'>
