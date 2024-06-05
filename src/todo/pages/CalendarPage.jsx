@@ -2,13 +2,13 @@ import { Calendar } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { getMessagesES, localizer } from '../../helpers'
 import { CalendarEvent } from '../components'
-import { useEventStore, useUiStore } from '../../hooks'
+import { useCalendarStore, useUiStore } from '../../hooks'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 export const CalendarPage = () => {
     const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'week' );
-    const { events, setActiveEvent, startLoadingEvents } = useEventStore();
+    const { events, setActiveEvent, startLoadingEvents } = useCalendarStore();
     const { openModal } = useUiStore();
     const { team, user } = useSelector(state => state.auth);
     

@@ -3,13 +3,13 @@ import DatePicker, { registerLocale } from "react-datepicker"
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
 import { addHours } from "date-fns";
-import { useEventStore, useUiStore } from "../../hooks";
+import { useCalendarStore, useUiStore } from "../../hooks";
 import { fireModal } from "../../helpers";
 
 registerLocale('es', es);
 
 export const EventRequestPage = () => {
-    const { startSavingEvent, message } = useEventStore();
+    const { startSavingEvent, message } = useCalendarStore();
     const { isCheckingForm } = useUiStore();
 
     const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);

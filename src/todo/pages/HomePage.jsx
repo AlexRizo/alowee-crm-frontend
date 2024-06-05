@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useEventStore } from "../../hooks/useEventStore";
+import { useCalendarStore } from "../../hooks/useCalendarStore";
 import { CardData, CardPending } from "../components"
 
 export const HomePage = () => {
-    const { latestEvents, startLoadingLatestEvents } = useEventStore();
+    const { latestEvents, startLoadingLatestEvents } = useCalendarStore();
 
     useEffect(() => {
         startLoadingLatestEvents();

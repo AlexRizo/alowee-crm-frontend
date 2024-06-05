@@ -4,7 +4,7 @@ import { clearMessage, onAddNewEvent, onCheckingForm, onDeleteEvent, onErrorResp
 import { todoApi } from "../api";
 import { convertDateEvent, fireModal } from "../helpers";
 
-export const useEventStore = () => {
+export const useCalendarStore = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
@@ -25,10 +25,45 @@ export const useEventStore = () => {
             // Create
             try {
                 const { data } = await todoApi.post('/events/new-event-req', eventData);
-                dispatch(onAddNewEvent({ id: data.event.id, ...eventData, user, status: false }));
+                dispatch(onAddNewEvent({ id: data.event.id, ...eventData, user, status: false, type: 'event' }));
                 fireModal({
                     title: 'Evento creado',
                     text: 'El evento ha sido creado y enviado para su revisión. Pronto recibirás una respuesta.',
+                    icon: 'success'
+                });
+                navigate('/calendar');
+            } catch (error) {
+                console.log(error);
+                dispatch(onErrorResponse(error.response.data?.message ||
+                    Object.values(error.response.data?.errors).map((error) => error.msg).join('<br/>') ||
+                    'Error desconocido'
+                ));
+
+                setTimeout(() => {
+                    dispatch(clearMessage());
+                }, 1000);
+            }
+        }
+        onCheckingForm();
+    };
+
+    const startSavingPost = async(postData) => {
+        onCheckingForm();
+
+        const file = new FormData();
+        file.append('file', postData.file);
+
+        if (postData.id) {
+            Update
+            dispatch(onUpdateEvent(postData));
+        } else {
+            // Create
+            try {
+                const { data } = await todoApi.post('/events/new-post-req', {...postData, file});
+                dispatch(onAddNewEvent({ id: data.event.id, ...postData, user, status: false, type: 'post' }));
+                fireModal({
+                    title: 'Tarea creada',
+                    text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
                     icon: 'success'
                 });
                 navigate('/calendar');
@@ -72,17 +107,23 @@ export const useEventStore = () => {
     };
 
     return {
-        // Properties
+    //* Properties
         events,
         latestEvents,
         activeEvent,
         message,
         hasEventSelected: !!activeEvent,
         
-        // Methods
+    //* Methods
+        //? Event
         setActiveEvent,
         startSavingEvent,
         startDeletingEvent,
+
+        //? Post
+        startSavingPost,
+
+        //? Load
         startLoadingEvents,
         startLoadingLatestEvents
     };
