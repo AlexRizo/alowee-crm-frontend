@@ -50,16 +50,33 @@ export const useCalendarStore = () => {
     const startSavingPost = async(postData) => {
         onCheckingForm();
 
-        const file = new FormData();
-        file.append('file', postData.file);
+        const postFormData = new FormData();
+
+        for (const key in postData) {
+            if (key === 'file') {
+                postFormData.append('file', postData.file[0]);
+            } else if (key === 'socialNetworks') {
+                postFormData.append('socialNetworks', JSON.stringify(postData.socialNetworks));
+            } else if (key === 'postDate') {
+                postFormData.append('postDate', postData.postDate.toISOString());
+            } else {
+                postFormData.append(key, postData[key]);
+            }
+        }
+
+        
 
         if (postData.id) {
-            Update
+            // Update
             dispatch(onUpdateEvent(postData));
         } else {
             // Create
             try {
-                const { data } = await todoApi.post('/events/new-post-req', {...postData, file});
+                const { data } = await todoApi.post('/events/new-post-req', postFormData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
                 dispatch(onAddNewEvent({ id: data.event.id, ...postData, user, status: false, type: 'post' }));
                 fireModal({
                     title: 'Tarea creada',
@@ -69,8 +86,8 @@ export const useCalendarStore = () => {
                 navigate('/calendar');
             } catch (error) {
                 console.log(error);
-                dispatch(onErrorResponse(error.response.data?.message ||
-                    Object.values(error.response.data?.errors).map((error) => error.msg).join('<br/>') ||
+                dispatch(onErrorResponse(error.response?.data?.message ||
+                    Object?.values(error.response?.data?.errors).map((error) => error.msg).join('<br/>') ||
                     'Error desconocido'
                 ));
 

@@ -10,7 +10,7 @@ const todoApi = axios.create({
 todoApi.interceptors.request.use(config => {
     config.headers = {
         ...config.headers,
-        'x-token': localStorage.getItem('token')
+        'x-token': localStorage.getItem('token'),
     }
 
     return config;

@@ -13,7 +13,6 @@ export const useAuthStore = () => {
             const { data } = await todoApi.post('/auth/login', { email, password });
             localStorage.setItem('token', data.tkn);
             localStorage.setItem('token-init-date', new Date().getTime());
-            console.log(data);
             dispatch(onLogin({
                 user: {
                     uid: data.user.uid,
