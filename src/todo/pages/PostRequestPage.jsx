@@ -63,7 +63,7 @@ export const PostRequestPage = () => {
                 <div className="flex flex-col gap-1">
                     <label htmlFor="title">Título de la Publicación *</label>
                     <input 
-                        className={`w-full p-2 bg-violet-400/10 rounded border border-gray-400/10 focus:outline-none focus:ring focus:ring-violet-700 transition`}
+                        className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition`}
                         type="text"
                         name="title"
                         {...register('title', {
@@ -92,7 +92,7 @@ export const PostRequestPage = () => {
                 <div className="flex flex-col gap-1 w-full">
                     <label htmlFor="postDescription">Contenido de la Publicación *</label> 
                     <textarea
-                        className={`p-2 bg-violet-400/10 rounded border border-gray-400/10 transition focus:outline-none focus:ring focus:ring-violet-700 resize-none`}
+                        className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
                         name="postDescription"
                         { ...register('postDescription', {
                             required: {
@@ -125,7 +125,7 @@ export const PostRequestPage = () => {
                         render={({ field }) => (
                             <input
                                 type="file"
-                                className="p-2 bg-violet-400/10 rounded border border-gray-400/10 transition focus:outline-none focus:ring focus:ring-violet-700 resize-none file:bg-violet-600 file:rounded file:text-gray-100 file:border-none file:p-1 text-gray-400"
+                                className="p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition file:bg-indigo-600 file:rounded file:text-gray-100 file:border-none file:p-1 text-gray-400 bg-white"
                                 name="file"
                                 onChange={ (event) => field.onChange(event.target.files) }
                             />
@@ -153,7 +153,7 @@ export const PostRequestPage = () => {
                             }}
                             render={({ field }) => (
                                 <DatePicker
-                                    className={`w-full p-2 bg-violet-400/10 rounded border border-gray-400/10 focus:outline-none focus:ring focus:ring-violet-700 transition`}
+                                    className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition`}
                                     placeholderText="Fecha en la que se publicará"
                                     dateFormat='Pp'
                                     showTimeSelect
@@ -178,15 +178,15 @@ export const PostRequestPage = () => {
                     <p>Redes Sociales *</p> 
                     <div className="flex gap-2">
                         <input onClick={ () => setSocialNetworkError('') } type="checkbox" name="Facebook" id="Facebook" value="facebook" {...register('facebook') } />
-                        <label htmlFor="Facebook" className="mr-2 text-gray-300">Facebook</label>
+                        <label htmlFor="Facebook" className="mr-2 text-gray-700">Facebook</label>
                     </div> 
                     <div className="flex gap-2">
                         <input onClick={ () => setSocialNetworkError('') } type="checkbox" name="Instagram" id="Instagram" value="instagram" {...register('instagram')} />
-                        <label htmlFor="Instagram" className="mr-2 text-gray-300">Instagram</label>
+                        <label htmlFor="Instagram" className="mr-2 text-gray-700">Instagram</label>
                     </div>
                     <div className="flex gap-2">
                         <input onClick={ () => setSocialNetworkError('') } type="checkbox" name="Otro" id="Otro" value="otro" {...register('otro')} />
-                        <label htmlFor="Otro" className="mr-2 text-gray-300">Otro</label>
+                        <label htmlFor="Otro" className="mr-2 text-gray-700">Otro</label>
                     </div>
                     {
                         socialNetworkError && <span className="text-red-500 text-sm flex gap-1 mt-1">
@@ -198,7 +198,7 @@ export const PostRequestPage = () => {
                 <div className="flex flex-col gap-1 w-full">
                     <label htmlFor="description">Descripción de la Solicitud *</label>
                     <textarea
-                        className={`p-2 bg-violet-400/10 rounded border border-gray-400/10 transition focus:outline-none focus:ring focus:ring-violet-700 resize-none`}
+                        className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
                         name="description"
                         { ...register('description', { 
                             required: {
@@ -220,7 +220,7 @@ export const PostRequestPage = () => {
                         </span> 
                     }
                 </div>
-                <button className="p-4 bg-violet-700 rounded hover:bg-violet-600 focus:bg-violet-800 transition" disabled={ isCheckingData } >Enviar Solicitud</button>
+                <button className="p-4 bg-indigo-800/90 rounded hover:bg-indigo-600 focus:bg-indigo-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
             </form>
         </>
     )

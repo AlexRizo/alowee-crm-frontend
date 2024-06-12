@@ -27,21 +27,22 @@ export const LoginPage = () => {
     }, [errorMessage]);
     
     return (
-        <div className="border border-violet-400/20 bg-gray-500/10 w-96 m-auto py-7 px-6 mt-20">
-            <h1 className="text-2xl text-center mb-4">Inicia Sesión</h1>
-            <form onSubmit={ loginSubmit }>
+        <div className="max-w-md m-auto mt-20">
+            <h1 className="text-3xl font-bold text-center mb-1">Ingresar</h1>
+            <p className='text-center mb-6 text-gray-600'>Ingresa tus datos para ingresar al sistema</p>
+            <form onSubmit={ loginSubmit } className="font-light">
                 <div className="flex flex-col gap-1 mb-3">
                     <label htmlFor='email'>Correo electrónico</label>
-                    <input className="p-2 text-gray-400 bg-black/40 focus:outline-none focus:ring focus:ring-violet-700 rounded transition focus:text-white" type='email' id='email' name='email' value={ email } onChange={ onInputChange } required placeholder='ejemplo@email.com'/>
+                    <input className="p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-violet-700 rounded transition" type='email' id='email' name='email' value={ email } onChange={ onInputChange } required placeholder='ejemplo@email.com'/>
                 </div>
                 <div className='flex flex-col gap-1 mb-3'>
                     <label htmlFor='password'>Contraseña</label>
-                    <input className="p-2 text-gray-400 bg-black/40 focus:outline-none focus:ring focus:ring-violet-700 rounded transition focus:text-white" type='password' id='password' name='password' value={ password } onChange={ onInputChange } required placeholder='***********'/>
+                    <input className="p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-violet-700 rounded transition" type='password' id='password' name='password' value={ password } onChange={ onInputChange } required placeholder='***********'/>
                 </div>
-                <p className='mb-5 text-violet-200 underline cursor-pointer w-max'>¿Olvidaste tu contraseña?</p>
-                <button disabled={ isCheckingAuthentication } type='submit' className="p-2 text-center w-full bg-violet-500 hover:bg-violet-600 transition rounded-md focus:bg-violet-700">
+                <button disabled={ isCheckingAuthentication } type='submit' className="p-2 text-center w-full bg-violet-500 hover:bg-violet-600 text-white transition rounded-md focus:bg-violet-700">
                     Ingresar
                 </button>
+                <p className='mt-3 font-normal text-center text-violet-500 underline cursor-pointer'>¿Olvidaste tu contraseña?</p>
             </form>
         </div>
     )

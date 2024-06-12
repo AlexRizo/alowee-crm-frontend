@@ -6,39 +6,19 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: rgb(29, 30, 35);
-    color: white;
+    background-color: #f4f4f4;
 }
 
 .my-color {
     background-color: #252c36;
 }
 
-.rbc-off-range-bg {
-    background-color: #252c36 !important;
+.rbc-header {
+    background-color: #252c36;
+    color: #fff;
+    text-transform: capitalize;
 }
 
-.rbc-today {
-    background-color: #252c36 !important;
-}
-
-.rbc-toolbar button {
-    color: rgb(140, 139, 139) !important;
-}
-
-.rbc-toolbar button:hover {
-    color: black !important;
-}
-
-.rbc-active {
-    color: black !important;
-}
-
-.rbc-timeslot-group, .rbc-time-slot {
-    border-color: rgba(255, 255, 255, 0.252) !important;
-}
-
-div:where(.swal2-container)
-div:where(.swal2-popu) {
-    background: #252c36 !important;
+.rbc-time-header-cell .rbc-today {
+    background: rgb(157, 66, 243);
 }

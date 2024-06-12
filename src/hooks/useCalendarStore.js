@@ -64,8 +64,6 @@ export const useCalendarStore = () => {
             }
         }
 
-        
-
         if (postData.id) {
             // Update
             dispatch(onUpdateEvent(postData));
@@ -102,7 +100,8 @@ export const useCalendarStore = () => {
     const startLoadingEvents = async() => {
         try {
             const { data } = await todoApi.get('/events');
-            const events = convertDateEvent(data.events);
+            const events = convertDateEvent(data.response.events);
+            
             dispatch(onLoadEvents(events));
         } catch (error) {
             console.log(error);
@@ -111,7 +110,7 @@ export const useCalendarStore = () => {
 
     const startLoadingLatestEvents = async() => {
         try {
-            const { data } = await todoApi.get('/events?limit=3');
+            const { data } = await todoApi.get('/events');
             const events = convertDateEvent(data.events);
             dispatch(onLoadlatestEvents(events));
         } catch (error) {

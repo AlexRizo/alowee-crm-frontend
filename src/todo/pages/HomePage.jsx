@@ -12,8 +12,12 @@ export const HomePage = () => {
     return (
         <>
             <div className="flex flex-row gap-5">
-                <CardData />
-                <CardPending events={ latestEvents }/>
+                <div>
+                    <CardData />
+                </div>
+                <div>
+                    <CardPending events={ latestEvents }/>
+                </div>
             </div>
             <div>
 

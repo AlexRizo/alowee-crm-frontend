@@ -26,9 +26,8 @@ export const CalendarPage = () => {
     const eventStyleGetter = (event, start, end, isSelected) => {
         const style = {
             backgroundColor: user.uid === event.user._id ? team.color : '#465660',
-            borderRadius: '0px',
-            opacity: .9,
-            color: 'white'
+            borderRadius: '5px',
+            color: user.uid === event.user._id ? 'black' : 'white'
         }
     
         return {
@@ -49,7 +48,7 @@ export const CalendarPage = () => {
                 events={ events }
                 startAccessor='start'
                 endAccessor='end'
-                style={{ height: '100%', width: '100%', color: 'white' }}
+                style={{ height: '100%', width: '100%', color: 'black' }}
                 eventPropGetter={ eventStyleGetter }
                 messages={ getMessagesES() }
                 components={{

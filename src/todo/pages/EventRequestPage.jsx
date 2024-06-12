@@ -103,13 +103,13 @@ export const EventRequestPage = () => {
     
     return (
         <>
-            <h1 className="text-center text-3xl mb-5">Nueva Solicitud de Evento</h1>
+            <h1 className="text-center text-3xl mb-5">Nuevo Evento</h1>
             <form className="flex flex-col gap-5 max-w-screen-lg m-auto" onSubmit={ onSubmit }>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="title">Evento *</label>
                     <input 
                         onBlur={ () => cleanError('title')}
-                        className={`w-full p-2 bg-violet-400/10 rounded border border-gray-400/10 focus:outline-none focus:ring focus:ring-violet-600 transition ${ !!formValidation.title && 'outline outline-red-500 transition' }`}
+                        className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition ${ !!formValidation.title && 'outline outline-red-500 transition' }`}
                         type="text"
                         name="title"
                         id="title"
@@ -124,7 +124,7 @@ export const EventRequestPage = () => {
                         <label htmlFor="start">Fecha de Inicio *</label> 
                         <DatePicker
                             onBlur={() => cleanError('start')}
-                            className={`w-full p-2 bg-violet-400/10 rounded border border-gray-400/10 focus:outline-none focus:ring focus:ring-violet-600 transition ${ !!formValidation.start && 'outline outline-red-500' }`}
+                            className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition ${ !!formValidation.start && 'outline outline-red-500' }`}
                             placeholderText="Fecha de inicio del evento"
                             dateFormat='Pp'
                             showTimeSelect
@@ -139,7 +139,7 @@ export const EventRequestPage = () => {
                         <label htmlFor="end">Fecha de Finalización *</label> 
                         <DatePicker
                             onBlur={() => cleanError('end')}
-                            className={`w-full p-2 bg-violet-400/10 rounded border border-gray-400/10 focus:outline-none focus:ring focus:ring-violet-600 transition ${ !!formValidation.end && 'outline outline-red-500' }`}
+                            className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition ${ !!formValidation.end && 'outline outline-red-500' }`}
                             placeholderText="Fecha de finalización del evento"
                             dateFormat='Pp'
                             showTimeSelect
@@ -156,19 +156,19 @@ export const EventRequestPage = () => {
                     <p>Requerimientos *</p> 
                     <div className="flex gap-2">
                         <input onClick={ () => cleanError('requiriments') } type="checkbox" name="fotografia" id="fotografia" value="fotografia" onChange={ onCheckboxChange } />
-                        <label htmlFor="fotografia" className="mr-2 text-gray-300">Fotografía</label>
+                        <label htmlFor="fotografia" className="mr-2 text-gray-900">Fotografía</label>
                     </div>
                     <div className="flex gap-2">
                         <input onClick={ () => cleanError('requiriments') } type="checkbox" name="Video" id="Video" value="video" onChange={ onCheckboxChange } />
-                        <label htmlFor="Video" className="mr-2 text-gray-300">Video</label>
+                        <label htmlFor="Video" className="mr-2 text-gray-700">Video</label>
                     </div>
                     <div className="flex gap-2">
                         <input onClick={ () => cleanError('requiriments') } type="checkbox" name="Reel" id="Reel" value="reel" onChange={ onCheckboxChange } />
-                        <label htmlFor="Reel" className="mr-2 text-gray-300">Reel</label>
+                        <label htmlFor="Reel" className="mr-2 text-gray-700">Reel</label>
                     </div>
                     <div className="flex gap-2">
                         <input onClick={ () => cleanError('requiriments') } type="checkbox" name="Transmicion" id="Transmicion" value="transmicion" onChange={ onCheckboxChange } />
-                        <label htmlFor="Transmicion" className="mr-2 text-gray-300">Transmisión en Vivo</label>
+                        <label htmlFor="Transmicion" className="mr-2 text-gray-700">Transmisión en Vivo</label>
                     </div>
                     <p className={`text-red-500 text-sm transition ${!!formValidation.requiriments ? '' : 'hidden' }`}>* { formValidation.requiriments }</p>
                 </div>
@@ -176,7 +176,7 @@ export const EventRequestPage = () => {
                         <label htmlFor="description">Descripción de la Solicitud *</label> 
                         <textarea
                             onBlur={ () => cleanError('description')}
-                            className={`${ !!formValidation.description && 'outline outline-red-500' } p-2 bg-violet-400/10 rounded border border-gray-400/10 transition focus:outline-none focus:ring focus:ring-violet-600 resize-none`}
+                            className={`${ !!formValidation.description && 'outline outline-red-500' } p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
                             name="description"
                             id="description"
                             placeholder="Descripción de la solicitud"
@@ -187,7 +187,7 @@ export const EventRequestPage = () => {
                         />
                         <p className={`text-red-500 text-sm transition ${!!formValidation.description ? '' : 'hidden' }`}>* { formValidation.description }</p>
                     </div>
-                    <button className="p-4 bg-violet-700 rounded hover:bg-violet-600 focus:bg-violet-800 transition" disabled={ isCheckingData } >Enviar Solicitud</button>
+                    <button className="p-4 bg-indigo-800/90 rounded hover:bg-indigo-600 focus:bg-indigo-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
             </form>
         </>
     )
