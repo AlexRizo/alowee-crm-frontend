@@ -5,6 +5,7 @@ import { CalendarEvent } from '../components'
 import { useCalendarStore, useUiStore } from '../../hooks'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { subDays } from 'date-fns'
 
 export const CalendarPage = () => {
     const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'week' );
@@ -25,9 +26,10 @@ export const CalendarPage = () => {
     
     const eventStyleGetter = (event, start, end, isSelected) => {
         const style = {
-            backgroundColor: user.uid === event.user._id ? team.color : '#465660',
+            backgroundColor: event.user._id === user.uid ? '#6875F5' : '#4B5563',
             borderRadius: '5px',
-            color: user.uid === event.user._id ? 'black' : 'white'
+            opacity: (event?.end || event?.postDate) < subDays(new Date(), 1) ? 0.6 : 1.0,
+            color: 'white',
         }
     
         return {
@@ -35,6 +37,18 @@ export const CalendarPage = () => {
         }
     };
 
+    const eventTypeStart = (event) => {
+        const start = event.type === 'event' ? event.start : event.postDate;
+        console.log(start);
+        return start;
+    }
+
+    const eventTypeEnd = (event) => {
+        const end = event.type === 'event' ? event.start : event.postDate;
+        console.log(end);
+        return end;
+    }
+    
     useEffect(() => {
         startLoadingEvents();
     }, []);
@@ -46,8 +60,8 @@ export const CalendarPage = () => {
                 localizer={ localizer }
                 defaultView={ lastView }
                 events={ events }
-                startAccessor='start'
-                endAccessor='end'
+                startAccessor={ eventTypeStart }
+                endAccessor={ eventTypeEnd }
                 style={{ height: '100%', width: '100%', color: 'black' }}
                 eventPropGetter={ eventStyleGetter }
                 messages={ getMessagesES() }

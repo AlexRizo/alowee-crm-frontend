@@ -8,3 +8,11 @@ export const convertDateEvent = (events) => {
         return event;
     })
 };
+
+export const convertDatePost = (posts) => {
+    return posts.map(post => {
+        post.postDate = parseISO(post.postDate);
+        
+        return post;
+    })
+};

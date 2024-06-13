@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearMessage, onAddNewEvent, onCheckingForm, onDeleteEvent, onErrorResponse, onLoadEvents, onLoadlatestEvents, onSetActiveEvent, onUpdateEvent } from "../store";
 import { todoApi } from "../api";
-import { convertDateEvent, fireModal } from "../helpers";
+import { convertDateEvent, convertDatePost, fireModal } from "../helpers";
 
 export const useCalendarStore = () => {
     const dispatch = useDispatch();
@@ -101,8 +101,9 @@ export const useCalendarStore = () => {
         try {
             const { data } = await todoApi.get('/events');
             const events = convertDateEvent(data.response.events);
+            const posts = convertDatePost(data.response.posts);
             
-            dispatch(onLoadEvents(events));
+            dispatch(onLoadEvents([...events, ...posts]));
         } catch (error) {
             console.log(error);
         }
@@ -111,8 +112,10 @@ export const useCalendarStore = () => {
     const startLoadingLatestEvents = async() => {
         try {
             const { data } = await todoApi.get('/events');
-            const events = convertDateEvent(data.events);
-            dispatch(onLoadlatestEvents(events));
+            const events = convertDateEvent(data.response.events);
+            const posts = convertDatePost(data.response.posts);
+
+            dispatch(onLoadlatestEvents([...events, ...posts]));
         } catch (error) {
             console.log(error);
         }
