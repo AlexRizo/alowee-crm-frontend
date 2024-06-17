@@ -39,13 +39,11 @@ export const CalendarPage = () => {
 
     const eventTypeStart = (event) => {
         const start = event.type === 'event' ? event.start : event.postDate;
-        console.log(start);
         return start;
     }
 
     const eventTypeEnd = (event) => {
         const end = event.type === 'event' ? event.start : event.postDate;
-        console.log(end);
         return end;
     }
     

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { Navbar } from '../../UI/components'
+import { CalendarModal } from '../components'
 
 export const TodoLayout = () => {
     return (
@@ -9,7 +10,8 @@ export const TodoLayout = () => {
             <div className="p-10 md:p-5 w-full max-h-screen">
                 <Outlet />
             </div>
-            
+
+            <CalendarModal />
         </div>
     )
 }

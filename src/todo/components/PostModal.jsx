@@ -1,13 +1,11 @@
 import { CalendarIcon, ClockIcon, UserIcon } from "@heroicons/react/24/outline"
-import { format, isSameDay } from "date-fns"
+import { format } from "date-fns"
 import { es } from "date-fns/locale"
 
-export const EventModal = ({ data }) => {
-
-    const sameDay = isSameDay(data.start, data.end)
+export const PostModal = ({ data }) => {
 
     const isRetarded = () => {
-        if (new Date(data.end) < new Date() && !data.status) return true;
+        if (new Date(data.postDate) < new Date() && !data.status) return true;
         console.log({ status: data.status });
         return false;
     };
@@ -20,15 +18,7 @@ export const EventModal = ({ data }) => {
                     <CalendarIcon className="h-5" />
                     <span>
                         {
-                            sameDay
-                            ? 
-                                <p>
-                                    {`${format(data.start, 'PPp', { locale: es })} - ${format(data.end, 'p', { locale: es })}`}
-                                </p>
-                            :
-                                <p>
-                                    {`${format(data.start, 'PPp', { locale: es })} - ${format(data.end, 'PPp', { locale: es })}`}
-                                </p>
+                            format(data.postDate, 'PPp', { locale: es })
                         }
                     </span>
                 </span>
