@@ -12,7 +12,7 @@ export const Navbar = () => {
     return (
         <>
         <div className="w-60 min-w-60 h-screen"></div>
-        <nav className="w-60 min-w-60 h-screen fixed p-4 bg-indigo-800/80 color-white">
+        <nav className="w-60 min-w-60 h-screen fixed p-4 bg-violet-700/80 color-white">
             <h1 className="text-white text-2xl font-bold mb-5 p-2">Alowee CRM</h1>
             <div className="p-2 flex flex-col">
                 <div className="p-2 text-gray-100 text-sm">
