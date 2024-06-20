@@ -28,7 +28,7 @@ export const TodoRoutes = [
                 element: <PostRequestPage />
             },
             {
-                path: '/requests/new-design/',
+                path: '/requests/new-design/print',
                 element: <DesignRequestPage />
             }
         ]

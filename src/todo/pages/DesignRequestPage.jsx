@@ -17,7 +17,8 @@ export const DesignRequestPage = () => {
 
     const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);
 
-    const [select, setSelect] = useState("")
+    const [designType, setDesignType] = useState("");
+    const [printType, setPrintType] = useState("");
 
     const validateFile = (file) => {
         if (!file) return true;
@@ -43,17 +44,17 @@ export const DesignRequestPage = () => {
 
     const onHandleSelect = ({ target }) => {
         setValue('designType', target.value)
-        setSelect(target.value)
+        setDesignType(target.value)
     }
 
     return (
         <>
-            <h1 className="text-center text-3xl mb-5">Nueva Solicitud de Diseño</h1>
+            <h1 className="text-center text-3xl mb-5">Nueva Solicitud de Diseño para Impresión</h1>
             <form className="flex flex-col gap-5 max-w-screen-lg m-auto" onSubmit={ onSubmit }>
                 <div className="flex flex-col gap-1">
-                    <label htmlFor="designType">Tipo de Solicitud *</label>
+                    <label htmlFor="designType">Tipo de Diseño *</label>
                     <select 
-                        value={ select }
+                        value={ designType }
                         className="w-full p-2 bg-white placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition"
                         name="designType"
                         {...register('designType', {
@@ -77,6 +78,38 @@ export const DesignRequestPage = () => {
                         </span> 
                     }
                 </div>
+                {
+                    designType === 'impresion' ? (
+                        <>
+                            <div className="flex flex-col gap-1">
+                                <label htmlFor="printType">Tipo de Impresión *</label>
+                                <select 
+                                    value={ printType }
+                                    className="w-full p-2 bg-white placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition"
+                                    name="printType"
+                                    {...register('printType', {
+                                        required: {
+                                            value: true,
+                                            message: 'El tipo de diseño es obligatorio'
+                                        },
+                                    })}
+                                >
+                                    <option value="invitacion">Invitación</option>    
+                                    <option value="lona" >Impresión</option>    
+                                    <option value="proyecto" >Playeras</option>    
+                                    <option value="digital" >Digital</option>    
+                                    <option value="otro" >Otro (especificar)</option>    
+                                </select>
+                                {
+                                    errors.title && <span className="text-red-500 text-sm flex gap-1 mt-1">
+                                        <ExclamationCircleIcon className="h-5 w-5" />
+                                        { errors.title.message }.
+                                    </span> 
+                                }
+                            </div>
+                        </>
+                    ) : ''
+                }
                 <div className="flex flex-col gap-1 w-full">
                     <label htmlFor="description">Archivos Adjuntos</label> 
                     <Controller

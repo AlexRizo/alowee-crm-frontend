@@ -1,7 +1,7 @@
 import { Calendar } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { getMessagesES, localizer } from '../../helpers'
-import { CalendarEvent } from '../components'
+import { CalendarEvent, CalendarModal } from '../components'
 import { useCalendarStore, useUiStore } from '../../hooks'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -52,25 +52,28 @@ export const CalendarPage = () => {
     }, []);
     
     return (
-        <div className='h-full max-h-full'>
-            <Calendar
-                culture='es'
-                localizer={ localizer }
-                defaultView={ lastView }
-                events={ events }
-                startAccessor={ eventTypeStart }
-                endAccessor={ eventTypeEnd }
-                style={{ height: '100%', width: '100%', color: 'black' }}
-                eventPropGetter={ eventStyleGetter }
-                messages={ getMessagesES() }
-                components={{
-                    event: CalendarEvent
-                }}
-                onDoubleClickEvent={ onDoubleClick }
-                onSelectEvent={ onSelect }
-                onView={ onView }
-            />
-        </div>
-
+        <>
+            <div className='h-full max-h-full'>
+                <Calendar
+                    culture='es'
+                    localizer={ localizer }
+                    defaultView={ lastView }
+                    events={ events }
+                    startAccessor={ eventTypeStart }
+                    endAccessor={ eventTypeEnd }
+                    style={{ height: '100%', width: '100%', color: 'black' }}
+                    eventPropGetter={ eventStyleGetter }
+                    messages={ getMessagesES() }
+                    components={{
+                        event: CalendarEvent
+                    }}
+                    onDoubleClickEvent={ onDoubleClick }
+                    onSelectEvent={ onSelect }
+                    onView={ onView }
+                />
+            </div>
+            
+            <CalendarModal />
+        </>
     )
 }
