@@ -9,31 +9,91 @@ import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 registerLocale('es', es);
 
-const LonaComponent = ({ setValue }) => {
-    const [loneSize, setLoneSize] = useState({ x: 0, y: 0 });
+const DocumentoComponent = ({ setValue }) => {
+    const [printSize, setPrintSize] = useState('a7');
 
-    const onChange = ({ target }) => {
-        const { name, value } = target;
-        setLoneSize({...loneSize, [name]: value })
-        setValue('loneSize', loneSize)
-        console.log(loneSize);
+    const handleSelect = ({ target }) => {
+        setPrintSize(target.value)
+        setValue('printSize', printSize)
     }
+    
+    return (
+        <div className="flex flex-col gap-1 w-full">
+            <label htmlFor="printSize">Tamaño del Documento *</label>
+            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+                <option value="a4" className="text-gray-500">A4 (8.27" x 11.69")</option>
+                <option value="a5" className="text-gray-500">A5 (5.83" x 8.27")</option>
+                <option value="carta" className="text-gray-500">Carta (8.5" x 11")</option>
+                <option value="legal" className="text-gray-500">Legal (8.5" x 14")</option>
+                <option value="oficio" className="text-gray-500">Oficio (8.5" x 13")</option>
+            </select>
+        </div>
+    );
+};
+
+const FolletoComponent = ({ setValue }) => {
+    const [printSize, setPrintSize] = useState('a7');
+
+    const handleSelect = ({ target }) => {
+        setPrintSize(target.value)
+        setValue('printSize', printSize)
+    }
+    
+    return (
+        <div className="flex flex-col gap-1 w-full">
+            <label htmlFor="printSize">Tamaño del Folleto *</label>
+            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+                <option value="a4" className="text-gray-500">A4 (8.27" x 11.69")</option>
+                <option value="dl" className="text-gray-500">DL (3.9" x 8.2")</option>
+                <option value="carta" className="text-gray-500">Carta (8.5" x 11")</option>
+                <option value="legal" className="text-gray-500">Legal (8.5" x 14")</option>
+            </select>
+        </div>
+    );
+};
+
+const LonaComponent = ({ register }) => {
     
     return (
         <div className="flex gap-4">
             <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="loneSize">Base *</label>
-                <input onChange={ onChange } type="number" name="x" id="x" required placeholder="Medida de la base"/>
+                <label htmlFor="xSize">Base *</label>
+                <input 
+                    className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-700 transition disabled:bg-gray-200 disabled:text-gray-500"
+                    type="number"
+                    name="xSize"
+                    id="xSize"
+                    required
+                    placeholder="Medida de la base"
+                    { ...register('xSize') }
+                />
             </div>
             <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="loneSize">Altura *</label>
-                <input onChange={ onChange } type="number" name="y" id="y" required placeholder="Medida de la Altura"/>
+                <label htmlFor="ySize">Altura *</label>
+                <input 
+                    className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-700 transition disabled:bg-gray-200 disabled:text-gray-500"
+                    type="number"
+                    name="ySize"
+                    id="ySize"
+                    required
+                    placeholder="Medida de la Altura"
+                    { ...register('ySize', {
+                        required: {
+                            value: true,
+                            message: 'Este campo es obligatorio'
+                        },
+                        type: {
+                            value: 'number',
+                            message: 'Sólo se permiten números'
+                        }
+                    }) }
+                />
             </div>
         </div>
     );
 };
 
-const InvitacionComponent = ({ setValue }) => {
+const InvitacionComponent = ({ setValue, register }) => {
     const [printSize, setPrintSize] = useState('a7');
 
     const handleSelect = ({ target }) => {
@@ -77,6 +137,10 @@ export const DesignRequestPage = () => {
     };
     
     const onSubmit = handleSubmit((data) => {
+        const { xSize, ySize } = data;
+
+        data.printSize = { x: xSize, y: ySize };
+        
         console.log(data);
         // startSavingPost(data);
     });
@@ -90,10 +154,11 @@ export const DesignRequestPage = () => {
     const handleSelect = ({ target }) => {
         setValue('printType', target.value)
         setPrintType(target.value)
+        console.log(printType)
     }
 
     return (
-        <div className="bg-white w-full p-6 rounded shadow">
+        <div className="bg-white w-full p-6 rounded shadow max-w-screen-2xl mx-auto">
             <h1 className="text-xl font-medium">Solicitud de Diseño para Impresión</h1>
             <p className="text-gray-600 mb-6">Compártenos los detalles de la solicitud para impresión</p>
             <form className="flex flex-col gap-5" onSubmit={ onSubmit }>
@@ -101,10 +166,10 @@ export const DesignRequestPage = () => {
                     <div className="flex flex-col gap-1 w-full">
                         <label htmlFor="designType">Tipo de Diseño *</label>
                         <select 
+                            value="impresion"
                             className="w-full p-2 bg-white selected:text-gray-800 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
                             name="designType"
                             disabled
-                            {...register('designType') }
                         >
                             <option value="impresion" >Impresión</option>    
                         </select>
@@ -134,7 +199,10 @@ export const DesignRequestPage = () => {
                 </div>
                 {
                     printType === 'invitacion' ? <InvitacionComponent setValue={ setValue } /> 
-                                : 'lona' ? <LonaComponent setValue={ setValue } /> : null 
+                                : printType === 'lona'       ? <LonaComponent setValue={ setValue } register={ register } />
+                                : printType === 'folleto'    ? <FolletoComponent setValue={ setValue } />
+                                : printType === 'documento oficial' ? <DocumentoComponent setValue={ setValue } />
+                                : printType === 'volante'    ? <FolletoComponent setValue={ setValue } /> : 'Ha ocurrido un error inesperado. Por favor, recarga la página y vuelve a intentarlo.'
                 }
                 <div className="flex gap-4">
                     <div className="flex flex-col gap-1 w-full">
@@ -262,7 +330,9 @@ export const DesignRequestPage = () => {
                         </a>
                     </p>
                 </div>
-                <button className="p-2 bg-violet-800/90 rounded hover:bg-violet-600 focus:bg-violet-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
+                <div className="flex justify-end">
+                    <button className="py-2 px-4 bg-violet-600 rounded hover:bg-violet-600/90 focus:bg-violet-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
+                </div>
             </form>
         </div>
     )
