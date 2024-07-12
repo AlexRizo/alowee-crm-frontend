@@ -11,7 +11,7 @@ export const CalendarPage = () => {
     const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'week' );
     const { events, setActiveEvent, startLoadingEvents } = useCalendarStore();
     const { openModal } = useUiStore();
-    const { team, user } = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
     
     const onDoubleClick = (e) => {
         openModal();
@@ -26,7 +26,7 @@ export const CalendarPage = () => {
     
     const eventStyleGetter = (event, start, end, isSelected) => {
         const style = {
-            backgroundColor: event.user._id === user.uid ? '#6875F5' : '#4B5563',
+            backgroundColor: event.user._id === user.uid ? '#00796b' : '#4B5563',
             borderRadius: '5px',
             opacity: (event?.end || event?.postDate) < subDays(new Date(), 1) ? 0.6 : 1.0,
             color: 'white',

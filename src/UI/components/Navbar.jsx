@@ -1,19 +1,27 @@
 import { NavLink } from "react-router-dom"
-import { CalendarIcon, HomeIcon, UserIcon, ArrowLeftEndOnRectangleIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/outline"
+import { CalendarIcon, HomeIcon, UserIcon, ArrowLeftEndOnRectangleIcon, ClipboardDocumentListIcon, UserCircleIcon } from "@heroicons/react/24/outline"
 import { useAuthStore } from "../../hooks";
 
 export const Navbar = () => {
-    const { startLogout } = useAuthStore();
-    
+    const { startLogout, user, team } = useAuthStore();
+
     const onLogout = () => {
         startLogout();
     };
-    
+
     return (
         <>
         <div className="w-60 min-w-60 h-screen"></div>
-        <nav className="w-60 min-w-60 h-screen fixed p-4 bg-violet-700/80 color-white">
-            <h1 className="text-white text-2xl font-bold mb-5 p-2">Alowee CRM</h1>
+        <nav className="w-60 min-w-60 h-screen fixed p-4 bg-sky-800 color-white">
+            <div className="mb-4 text-white font-bold p-2 text-center">
+                <div className="flex flex-col items-center">
+                    <div className="bg-white/10 rounded-full w-min p-2 mb-1">
+                        <UserCircleIcon className="h-20" />
+                    </div>
+                    <p className="text-sm font-normal">{ user.name }</p>
+                    <h1 className="text-2xl">{ team.team }</h1>
+                </div>
+            </div>
             <div className="p-2 flex flex-col">
                 <div className="p-2 text-gray-100 text-sm">
                     <span>Menú</span>

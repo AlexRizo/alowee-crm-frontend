@@ -4,7 +4,7 @@ import { todoApi } from "../api";
 
 export const useAuthStore = () => {
     const dispatch = useDispatch();
-    const { status, user, errorMessage } = useSelector((state) => state.auth);
+    const { status, user, team, errorMessage } = useSelector((state) => state.auth);
 
     const startLogin = async(email, password) => {
         dispatch(onChecking());
@@ -72,6 +72,7 @@ export const useAuthStore = () => {
         // Properties
         status,
         user,
+        team,
         errorMessage,
 
         // Functions

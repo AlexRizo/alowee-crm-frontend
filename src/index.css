@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
     margin: 0;
     padding: 0;
@@ -20,7 +24,7 @@ body {
 }
 
 .rbc-time-header-cell .rbc-today {
-    background: rgb(157, 66, 243);
+    background: rgb(50, 104, 192);
 }
 
 .ReactModalPortal > div{

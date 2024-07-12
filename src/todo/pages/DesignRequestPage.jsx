@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useCalendarStore, useUiStore } from "../../hooks";
 import { fireModal } from "../../helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { ErrorComponent } from "../components";
 
 registerLocale('es', es);
 
@@ -20,7 +21,7 @@ const DocumentoComponent = ({ setValue }) => {
     return (
         <div className="flex flex-col gap-1 w-full">
             <label htmlFor="printSize">Tamaño del Documento *</label>
-            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
                 <option value="a4" className="text-gray-500">A4 (8.27" x 11.69")</option>
                 <option value="a5" className="text-gray-500">A5 (5.83" x 8.27")</option>
                 <option value="carta" className="text-gray-500">Carta (8.5" x 11")</option>
@@ -42,7 +43,7 @@ const FolletoComponent = ({ setValue }) => {
     return (
         <div className="flex flex-col gap-1 w-full">
             <label htmlFor="printSize">Tamaño del Folleto *</label>
-            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
                 <option value="a4" className="text-gray-500">A4 (8.27" x 11.69")</option>
                 <option value="dl" className="text-gray-500">DL (3.9" x 8.2")</option>
                 <option value="carta" className="text-gray-500">Carta (8.5" x 11")</option>
@@ -59,7 +60,7 @@ const LonaComponent = ({ register }) => {
             <div className="flex flex-col gap-1 w-full">
                 <label htmlFor="xSize">Base *</label>
                 <input 
-                    className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-700 transition disabled:bg-gray-200 disabled:text-gray-500"
+                    className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-sky-700 transition disabled:bg-gray-200 disabled:text-gray-500"
                     type="number"
                     name="xSize"
                     id="xSize"
@@ -71,7 +72,7 @@ const LonaComponent = ({ register }) => {
             <div className="flex flex-col gap-1 w-full">
                 <label htmlFor="ySize">Altura *</label>
                 <input 
-                    className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-700 transition disabled:bg-gray-200 disabled:text-gray-500"
+                    className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-sky-700 transition disabled:bg-gray-200 disabled:text-gray-500"
                     type="number"
                     name="ySize"
                     id="ySize"
@@ -104,7 +105,7 @@ const InvitacionComponent = ({ setValue, register }) => {
     return (
         <div className="flex flex-col gap-1 w-full">
             <label htmlFor="printSize">Tamaño de la Invitación *</label>
-            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
                 <option value="a7" className="text-gray-500">A7 (5" x 7")</option>
                 <option value="a6" className="text-gray-500">A6 (4.5" x 6.25")</option>
                 <option value="a2" className="text-gray-500">A2 (4.25" x 5.5")</option>
@@ -158,7 +159,7 @@ export const DesignRequestPage = () => {
     }
 
     return (
-        <div className="bg-white w-full p-6 rounded shadow max-w-screen-2xl mx-auto">
+        <div className="bg-white w-full p-6 rounded shadow container mx-auto">
             <h1 className="text-xl font-medium">Solicitud de Diseño para Impresión</h1>
             <p className="text-gray-600 mb-6">Compártenos los detalles de la solicitud para impresión</p>
             <form className="flex flex-col gap-5" onSubmit={ onSubmit }>
@@ -167,7 +168,7 @@ export const DesignRequestPage = () => {
                         <label htmlFor="designType">Tipo de Diseño *</label>
                         <select 
                             value="impresion"
-                            className="w-full p-2 bg-white selected:text-gray-800 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
+                            className="w-full p-2 bg-white selected:text-gray-800 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
                             name="designType"
                             disabled
                         >
@@ -178,7 +179,7 @@ export const DesignRequestPage = () => {
                         <label htmlFor="printType">Tipo de Impresión *</label>
                         <select 
                             value={ printType }
-                            className="w-full p-2 bg-white selected:text-gray-800 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
+                            className="w-full p-2 bg-white selected:text-gray-800 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
                             name="printType"
                             {...register('printType') }
                             onChange={ handleSelect }
@@ -190,10 +191,7 @@ export const DesignRequestPage = () => {
                             <option value="volante" className="text-gray-500" >Volante</option>  
                         </select>
                         {
-                            errors.title && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                                <ExclamationCircleIcon className="h-5 w-5" />
-                                { errors.title.message }.
-                            </span> 
+                            errors.title && <ErrorComponent error={ errors.title.message } />
                         }
                     </div>
                 </div>
@@ -208,7 +206,7 @@ export const DesignRequestPage = () => {
                     <div className="flex flex-col gap-1 w-full">
                         <label htmlFor="printContent">Contenido de la Impresión *</label>
                         <textarea
-                            className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
+                            className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition resize-none`}
                             name="printContent"
                             { ...register('printContent', { 
                                 required: {
@@ -224,16 +222,14 @@ export const DesignRequestPage = () => {
                             rows={ 5 }
                         />
                         { 
-                            errors.printContent && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                                <ExclamationCircleIcon className="h-5 w-5" />
-                                { errors.printContent.message }
-                            </span> 
+                            errors.printContent && <ErrorComponent error={ errors.printContent.message } />
+
                         }
                     </div>
                     <div className="flex flex-col gap-1 w-full">
                         <label htmlFor="description">Descripción de la Solicitud *</label>
                         <textarea
-                            className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
+                            className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition resize-none`}
                             name="description"
                             { ...register('description', { 
                                 required: {
@@ -249,10 +245,7 @@ export const DesignRequestPage = () => {
                             rows={ 5 }
                         />
                         { 
-                            errors.description && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                                <ExclamationCircleIcon className="h-5 w-5" />
-                                { errors.description.message }
-                            </span> 
+                            errors.description && <ErrorComponent error={ errors.description.message } />
                         }
                     </div>
                 </div>
@@ -271,7 +264,7 @@ export const DesignRequestPage = () => {
                             }}
                             render={({ field }) => (
                                 <DatePicker
-                                    className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition`}
+                                    className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition`}
                                     placeholderText="Fecha en la que se publicará"
                                     dateFormat='Pp'
                                     showTimeSelect
@@ -285,10 +278,7 @@ export const DesignRequestPage = () => {
                             )}
                         />
                         {
-                            errors.postDate && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                                <ExclamationCircleIcon className="h-5 w-5" />
-                                { errors.postDate.message }
-                            </span>
+                            errors.postDate && <ErrorComponent error={ errors.postDate.message } />
                         }
                     </div>
                 </div>
@@ -303,17 +293,14 @@ export const DesignRequestPage = () => {
                         render={({ field }) => (
                             <input
                                 type="file"
-                                className="p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition file:bg-violet-600 file:rounded file:text-gray-100 file:border-none file:p-1 text-gray-400 bg-white"
+                                className="p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition file:bg-sky-600 file:rounded file:text-gray-100 file:border-none file:p-1 text-gray-400 bg-white"
                                 name="file"
                                 onChange={ (event) => field.onChange(event.target.files) }
                             />
                         )}
                     />
                     { 
-                        errors.file && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                            <ExclamationCircleIcon className="h-5 w-5" />
-                            { errors.file.message }.
-                        </span> 
+                        errors.file && <ErrorComponent error={ errors.printContent.message } />
                     }
                     <p className="text-gray-500">
                         
@@ -325,13 +312,13 @@ export const DesignRequestPage = () => {
                         Si no tienes idea de cómo hacerlo, aquí tienes un 
                         tutorial de cómo hacerlo:
                         &nbsp; 
-                        <a href="#" className="font-medium underline text-purple-700">
+                        <a href="#" className="font-medium underline text-sky-700">
                             ¿Cómo comprimir archivos?
                         </a>
                     </p>
                 </div>
                 <div className="flex justify-end">
-                    <button className="py-2 px-4 bg-violet-600 rounded hover:bg-violet-600/90 focus:bg-violet-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
+                    <button className="py-2 px-4 bg-sky-600 rounded hover:bg-sky-600/90 focus:bg-sky-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
                 </div>
             </form>
         </div>
