@@ -11,7 +11,7 @@ import { ErrorComponent } from "../components";
 registerLocale('es', es);
 
 const DocumentoComponent = ({ setValue }) => {
-    const [printSize, setPrintSize] = useState('a7');
+    const [printSize, setPrintSize] = useState('');
 
     const handleSelect = ({ target }) => {
         setPrintSize(target.value)
@@ -22,6 +22,7 @@ const DocumentoComponent = ({ setValue }) => {
         <div className="flex flex-col gap-1 w-full">
             <label htmlFor="printSize">Tamaño del Documento *</label>
             <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+                <option value="" className="text-gray-500">-SELECCIONA UNA MEDIDA-</option>
                 <option value="a4" className="text-gray-500">A4 (8.27" x 11.69")</option>
                 <option value="a5" className="text-gray-500">A5 (5.83" x 8.27")</option>
                 <option value="carta" className="text-gray-500">Carta (8.5" x 11")</option>
@@ -94,30 +95,35 @@ const LonaComponent = ({ register }) => {
     );
 };
 
-const InvitacionComponent = ({ setValue, register }) => {
-    const [printSize, setPrintSize] = useState('a7');
-
-    const handleSelect = ({ target }) => {
-        setPrintSize(target.value)
-        setValue('printSize', printSize)
-    }
+const InvitacionComponent = ({ setValue, register, errors }) => {
     
     return (
         <div className="flex flex-col gap-1 w-full">
             <label htmlFor="printSize">Tamaño de la Invitación *</label>
-            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+            <select 
+                name="printSize" 
+                id="printSize"
+                className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
+                {...register('printSize', {
+                    validate: value => value !== "" || "Debe seleccionar una medida"
+                })}
+            >
+                <option value="" className="text-gray-500">-SELECCIONA UNA MEDIDA-</option>
                 <option value="a7" className="text-gray-500">A7 (5" x 7")</option>
                 <option value="a6" className="text-gray-500">A6 (4.5" x 6.25")</option>
                 <option value="a2" className="text-gray-500">A2 (4.25" x 5.5")</option>
                 <option value="dl" className="text-gray-500">DL (3.9" x 8.2")</option>
                 <option value="square" className="text-gray-500">Square (5.5" x 5.5")</option>
             </select>
+            {
+                errors.printSize && <ErrorComponent error={ errors.printSize.message } />
+            }
         </div>
     );
 };
 
 export const DesignRequestPage = () => {
-    const { startSavingPost, message } = useCalendarStore();
+    const { startSavingDesign, message } = useCalendarStore();
     const { isCheckingForm } = useUiStore();
 
     const { control, register, setValue, handleSubmit, formState: { errors } } = useForm();
@@ -131,19 +137,15 @@ export const DesignRequestPage = () => {
         
         const allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip', 'rar', 'nef'];
         const type = file[0].name.split('.').pop().toLowerCase();
-        const maxSize = 1024 * 1024 * 25; //? 25MB
+        const maxSize = 1024 * 1024 * 10; //? 10MB
         
         if (!allowedTypes.includes(type)) return 'Tipo de archivo no permitido. Sólo se permiten archivos de tipo: ' + allowedTypes.join(', ');
-        if (file[0].size > maxSize) return 'El archivo excede el tamaño permitido. Sólo se permiten archivos de hasta 25MB';
+        if (file[0].size > maxSize) return 'El archivo excede el tamaño permitido. Sólo se permiten archivos de hasta ' + maxSize / 1024 / 1024 + ' MB';
     };
     
     const onSubmit = handleSubmit((data) => {
-        const { xSize, ySize } = data;
-
-        data.printSize = { x: xSize, y: ySize };
-        
-        console.log(data);
-        // startSavingPost(data);
+        data.designType = 'impresion';
+        startSavingDesign(data);
     });
     
     useEffect(() => {
@@ -196,7 +198,7 @@ export const DesignRequestPage = () => {
                     </div>
                 </div>
                 {
-                    printType === 'invitacion' ? <InvitacionComponent setValue={ setValue } /> 
+                    printType === 'invitacion' ? <InvitacionComponent setValue={ setValue } register={ register } errors={ errors } /> 
                                 : printType === 'lona'       ? <LonaComponent setValue={ setValue } register={ register } />
                                 : printType === 'folleto'    ? <FolletoComponent setValue={ setValue } />
                                 : printType === 'documento oficial' ? <DocumentoComponent setValue={ setValue } />
@@ -300,7 +302,7 @@ export const DesignRequestPage = () => {
                         )}
                     />
                     { 
-                        errors.file && <ErrorComponent error={ errors.printContent.message } />
+                        errors.file && <ErrorComponent error={ errors.file.message } />
                     }
                     <p className="text-gray-500">
                         

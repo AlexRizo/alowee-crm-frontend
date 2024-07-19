@@ -97,6 +97,58 @@ export const useCalendarStore = () => {
         onCheckingForm();
     };
 
+    const startSavingDesign = async(designData) => {
+        onCheckingForm();
+
+        const DesignFormData = new FormData();
+
+        for (const key in designData) {
+            if (key === 'file') {
+                DesignFormData.append('file', designData.file[0]);
+            } else if (key === 'socialNetworks') {
+                DesignFormData.append('socialNetworks', JSON.stringify(designData.socialNetworks));
+            } else if (key === 'postDate') {
+                DesignFormData.append('postDate', designData.postDate.toISOString());
+            } else {
+                DesignFormData.append(key, designData[key]);
+            }
+        }
+
+        console.log({designData});
+
+        // if (postData.id) {
+        //     // Update
+        //     dispatch(onUpdateEvent(postData));
+        // } else {
+        //     // Create
+        //     try {
+        //         const { data } = await todoApi.post('/events/new-post-req', postFormData, {
+        //             headers: {
+        //                 'Content-Type': 'multipart/form-data'
+        //             }
+        //         });
+        //         dispatch(onAddNewEvent({ id: data.event.id, ...postData, user, status: false, type: 'post' }));
+        //         fireModal({
+        //             title: 'Tarea creada',
+        //             text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
+        //             icon: 'success'
+        //         });
+        //         navigate('/calendar');
+        //     } catch (error) {
+        //         console.log(error);
+        //         dispatch(onErrorResponse(error.response?.data?.message ||
+        //             Object?.values(error.response?.data?.errors).map((error) => error.msg).join('<br/>') ||
+        //             'Error desconocido'
+        //         ));
+
+        //         setTimeout(() => {
+        //             dispatch(clearMessage());
+        //         }, 1000);
+        //     }
+        // }
+        onCheckingForm();
+    }
+
     const startLoadingEvents = async() => {
         try {
             const { data } = await todoApi.get('/events');
@@ -139,9 +191,12 @@ export const useCalendarStore = () => {
         startSavingEvent,
         startDeletingEvent,
 
-        //? Post
+        //?! Post
         startSavingPost,
 
+        //?! Design
+        startSavingDesign,
+        
         //? Load
         startLoadingEvents,
         startLoadingLatestEvents

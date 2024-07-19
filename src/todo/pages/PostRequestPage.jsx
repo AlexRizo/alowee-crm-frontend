@@ -38,6 +38,8 @@ export const PostRequestPage = () => {
         const allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip', 'rar', 'nef'];
         const type = file[0].name.split('.').pop().toLowerCase();
         const maxSize = 1024 * 1024 * 25; //? 25MB
+
+        console.log({file});
         
         if (!allowedTypes.includes(type)) return 'Tipo de archivo no permitido. Sólo se permiten archivos de tipo: jpg, jpeg, png, pdf, doc, docx, xls, xlsx, ppt, pptx, txt, zip, rar';
         if (file[0].size > maxSize) return 'El archivo excede el tamaño permitido. Sólo se permiten archivos de hasta 25MB';
