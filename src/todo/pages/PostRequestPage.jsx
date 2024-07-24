@@ -63,7 +63,7 @@ export const PostRequestPage = () => {
             <h1 className="text-center text-3xl mb-5">Nueva Solicitud de Publicación</h1>
             <form className="flex flex-col gap-5 max-w-screen-lg m-auto" onSubmit={ onSubmit }>
                 <div className="flex flex-col gap-1">
-                    <label htmlFor="title">Título de la Publicación *</label>
+                    <label htmlFor="title">Título de la Publicación</label>
                     <input 
                         className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition`}
                         type="text"
@@ -92,7 +92,7 @@ export const PostRequestPage = () => {
                     }
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                    <label htmlFor="postDescription">Contenido de la Publicación *</label> 
+                    <label htmlFor="postDescription">Contenido de la Publicación</label> 
                     <textarea
                         className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
                         name="postDescription"
@@ -177,7 +177,7 @@ export const PostRequestPage = () => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                    <p>Redes Sociales *</p> 
+                    <p>Redes Sociales</p> 
                     <div className="flex gap-2">
                         <input onClick={ () => setSocialNetworkError('') } type="checkbox" name="Facebook" id="Facebook" value="facebook" {...register('facebook') } />
                         <label htmlFor="Facebook" className="mr-2 text-gray-700">Facebook</label>
@@ -198,7 +198,7 @@ export const PostRequestPage = () => {
                     }
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                    <label htmlFor="description">Descripción de la Solicitud *</label>
+                    <label htmlFor="description">Descripción de la Solicitud</label>
                     <textarea
                         className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
                         name="description"

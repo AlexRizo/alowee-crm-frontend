@@ -16,3 +16,11 @@ export const convertDatePost = (posts) => {
         return post;
     })
 };
+
+export const convertDatePrint = (prints) => {
+    return prints.map(print => {
+        print.printDate = parseISO(print.printDate);
+        
+        return print;
+    })
+};

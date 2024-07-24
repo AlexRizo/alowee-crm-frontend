@@ -38,12 +38,12 @@ export const CalendarPage = () => {
     };
 
     const eventTypeStart = (event) => {
-        const start = event.type === 'event' ? event.start : event.postDate;
+        const start = event.type === 'event' ? event.start : event.postDate ? event.PostDate : event.printDate;
         return start;
     }
 
     const eventTypeEnd = (event) => {
-        const end = event.type === 'event' ? event.start : event.postDate;
+        const end = event.type === 'event' ? event.end : event.postDate ? event.PostDate : event.printDate;
         return end;
     }
     

@@ -108,7 +108,7 @@ const InvitacionComponent = ({ setValue, register, errors }) => {
                     validate: value => value !== "" || "Debe seleccionar una medida"
                 })}
             >
-                <option value="" className="text-gray-500">-SELECCIONA UNA MEDIDA-</option>
+                <option value="" className="text-gray-800">- Selecciona una medida -</option>
                 <option value="a7" className="text-gray-500">A7 (5" x 7")</option>
                 <option value="a6" className="text-gray-500">A6 (4.5" x 6.25")</option>
                 <option value="a2" className="text-gray-500">A2 (4.25" x 5.5")</option>
@@ -145,7 +145,13 @@ export const DesignRequestPage = () => {
     
     const onSubmit = handleSubmit((data) => {
         data.designType = 'impresion';
-        startSavingDesign(data);
+        const { xSize, ySize, ...rest } = data;
+
+        const printSize = xSize && ySize ? { xSize, ySize } : { size: rest.printSize };
+
+        rest.printSize = printSize;
+
+        startSavingDesign(rest);
     });
     
     useEffect(() => {
@@ -155,7 +161,11 @@ export const DesignRequestPage = () => {
     }, [message]);
 
     const handleSelect = ({ target }) => {
-        setValue('printType', target.value)
+        setValue('printType', target.value);
+        setValue('printSize', '');
+        setValue('xSize', '');
+        setValue('ySize', '');
+        
         setPrintType(target.value)
         console.log(printType)
     }
@@ -167,7 +177,7 @@ export const DesignRequestPage = () => {
             <form className="flex flex-col gap-5" onSubmit={ onSubmit }>
                 <div className="flex gap-4">
                     <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="designType">Tipo de Diseño *</label>
+                        <label htmlFor="designType">Tipo de Diseño</label>
                         <select 
                             value="impresion"
                             className="w-full p-2 bg-white selected:text-gray-800 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
@@ -178,7 +188,7 @@ export const DesignRequestPage = () => {
                         </select>
                     </div>
                     <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="printType">Tipo de Impresión *</label>
+                        <label htmlFor="printType">Tipo de Impresión</label>
                         <select 
                             value={ printType }
                             className="w-full p-2 bg-white selected:text-gray-800 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
@@ -193,7 +203,7 @@ export const DesignRequestPage = () => {
                             <option value="volante" className="text-gray-500" >Volante</option>  
                         </select>
                         {
-                            errors.title && <ErrorComponent error={ errors.title.message } />
+                            errors.printType && <ErrorComponent error={ errors.printType.message } />
                         }
                     </div>
                 </div>
@@ -206,7 +216,7 @@ export const DesignRequestPage = () => {
                 }
                 <div className="flex gap-4">
                     <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="printContent">Contenido de la Impresión *</label>
+                        <label htmlFor="printContent">Contenido de la Impresión</label>
                         <textarea
                             className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition resize-none`}
                             name="printContent"
@@ -229,11 +239,11 @@ export const DesignRequestPage = () => {
                         }
                     </div>
                     <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="description">Descripción de la Solicitud *</label>
+                        <label htmlFor="description">Descripción de la Solicitud</label>
                         <textarea
                             className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition resize-none`}
                             name="description"
-                            { ...register('description', { 
+                            { ...register('printDescription', { 
                                 required: {
                                     value: true,
                                     message: 'Este campo es obligatorio'
@@ -247,16 +257,16 @@ export const DesignRequestPage = () => {
                             rows={ 5 }
                         />
                         { 
-                            errors.description && <ErrorComponent error={ errors.description.message } />
+                            errors.printDescription && <ErrorComponent error={ errors.printDescription.message } />
                         }
                     </div>
                 </div>
                 <div className="flex gap-4">
                     <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="start">Fecha Estimada de Entrega *</label> 
+                        <label htmlFor="start">Fecha Estimada de Entrega</label> 
                         <Controller
                             control={ control }
-                            name="postDate"
+                            name="printDate"
                             rules={{ 
                                 required: {
                                     value: true,
@@ -271,7 +281,7 @@ export const DesignRequestPage = () => {
                                     dateFormat='Pp'
                                     showTimeSelect
                                     locale='es'
-                                    name="postDate"
+                                    name="printDate"
                                     timeCaption="Hora"
                                     minDate={ new Date() }
                                     onChange={ (event) => field.onChange(event) }
@@ -280,12 +290,12 @@ export const DesignRequestPage = () => {
                             )}
                         />
                         {
-                            errors.postDate && <ErrorComponent error={ errors.postDate.message } />
+                            errors.printDate && <ErrorComponent error={ errors.printDate.message } />
                         }
                     </div>
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                    <label htmlFor="description">Archivos Adjuntos</label> 
+                    <label htmlFor="description">Archivos Adjuntos <span className="text-gray-500 text-xs">(opcional)</span></label> 
                     <Controller
                         name="file"
                         control={ control }

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearMessage, onAddNewEvent, onCheckingForm, onDeleteEvent, onErrorResponse, onLoadEvents, onLoadlatestEvents, onSetActiveEvent, onUpdateEvent } from "../store";
 import { todoApi } from "../api";
-import { convertDateEvent, convertDatePost, fireModal } from "../helpers";
+import { convertDateEvent, convertDatePost, convertDatePrint, fireModal } from "../helpers";
 
 export const useCalendarStore = () => {
     const dispatch = useDispatch();
@@ -75,7 +75,7 @@ export const useCalendarStore = () => {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                dispatch(onAddNewEvent({ id: data.event.id, ...postData, user, status: false, type: 'post' }));
+                dispatch(onAddNewEvent({ id: data.post.id, ...postData, user, status: false, type: 'post' }));
                 fireModal({
                     title: 'Tarea creada',
                     text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
@@ -104,48 +104,51 @@ export const useCalendarStore = () => {
 
         for (const key in designData) {
             if (key === 'file') {
-                DesignFormData.append('file', designData.file[0]);
-            } else if (key === 'socialNetworks') {
-                DesignFormData.append('socialNetworks', JSON.stringify(designData.socialNetworks));
-            } else if (key === 'postDate') {
-                DesignFormData.append('postDate', designData.postDate.toISOString());
+                if (designData.file) DesignFormData.append('file', designData.file[0]);
+            
+            } else if (key === 'printSize') {
+                DesignFormData.append('printSize', JSON.stringify(designData.printSize));
+            } else if (key === 'printDate') {
+                DesignFormData.append('printDate', designData.printDate.toISOString());
             } else {
                 DesignFormData.append(key, designData[key]);
             }
         }
 
-        console.log({designData});
+        console.log({ DesignFormData });
 
-        // if (postData.id) {
-        //     // Update
-        //     dispatch(onUpdateEvent(postData));
-        // } else {
-        //     // Create
-        //     try {
-        //         const { data } = await todoApi.post('/events/new-post-req', postFormData, {
-        //             headers: {
-        //                 'Content-Type': 'multipart/form-data'
-        //             }
-        //         });
-        //         dispatch(onAddNewEvent({ id: data.event.id, ...postData, user, status: false, type: 'post' }));
-        //         fireModal({
-        //             title: 'Tarea creada',
-        //             text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
-        //             icon: 'success'
-        //         });
-        //         navigate('/calendar');
-        //     } catch (error) {
-        //         console.log(error);
-        //         dispatch(onErrorResponse(error.response?.data?.message ||
-        //             Object?.values(error.response?.data?.errors).map((error) => error.msg).join('<br/>') ||
-        //             'Error desconocido'
-        //         ));
+        if (designData.id) {
+            // Update
+            dispatch(onUpdateEvent(designData));
+        } else {
+            // Create
+            try {
+                const { data } = await todoApi.post('/events/new-design-req/print', DesignFormData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
 
-        //         setTimeout(() => {
-        //             dispatch(clearMessage());
-        //         }, 1000);
-        //     }
-        // }
+                dispatch(onAddNewEvent({ id: data.print.id, ...designData, user, status: false, type: 'post' }));
+                fireModal({
+                    title: 'Tarea creada',
+                    text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
+                    icon: 'success'
+                });
+                navigate('/calendar');
+            } catch (error) {
+                console.log(error);
+                dispatch(onErrorResponse(
+                    error.response?.data?.message ||
+                    Object.values(error.response?.data?.errors).map((error) => error.msg).join('<br/>') ||
+                    'Error desconocido'
+                ));
+
+                setTimeout(() => {
+                    dispatch(clearMessage());
+                }, 1000);
+            }
+        }
         onCheckingForm();
     }
 
@@ -154,8 +157,9 @@ export const useCalendarStore = () => {
             const { data } = await todoApi.get('/events');
             const events = convertDateEvent(data.response.events);
             const posts = convertDatePost(data.response.posts);
+            const prints = convertDatePrint(data.response.prints);
             
-            dispatch(onLoadEvents([...events, ...posts]));
+            dispatch(onLoadEvents([ ...events, ...posts, ...prints ]));
         } catch (error) {
             console.log(error);
         }
