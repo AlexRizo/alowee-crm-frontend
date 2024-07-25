@@ -2,7 +2,7 @@ import Modal from 'react-modal';
 import { useUiStore } from "../../hooks";
 import { useSelector } from 'react-redux';
 import { EventModal } from './EventModal';
-import { PostModal } from './PostModal';
+import { RequestModal } from './RequestModal';
 
 export const CalendarModal = () => {
     const { isModalOpen, closeModal } = useUiStore();
@@ -30,9 +30,10 @@ export const CalendarModal = () => {
         >
             {
                 activeEvent?.type === 'event' ? <EventModal data={ activeEvent } />
-                : activeEvent?.type === 'post' ? <PostModal data={ activeEvent } /> : <h1>Task</h1> 
+                : <RequestModal data={ activeEvent } />
             }
             <div className='flex gap-2 justify-end'>
+                <a href={ activeEvent?.file } download="download" className='border bg-blue-200 p-1 text-center'>Descargar adjuntos</a>
                 <button className='border border-gray-300 rounded outline-none p-2 hover:bg-gray-100 transition'>Ir al evento</button>
                 <button className='rounded outline-none p-2 bg-black text-white hover:bg-black/80 transition' onClick={closeModal}>Cerrar</button>
             </div>

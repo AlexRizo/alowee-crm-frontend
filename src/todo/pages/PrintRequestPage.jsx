@@ -5,7 +5,6 @@ import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
 import { useCalendarStore, useUiStore } from "../../hooks";
 import { fireModal } from "../../helpers";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { ErrorComponent } from "../components";
 
 registerLocale('es', es);
@@ -128,14 +127,14 @@ export const PrintRequestPage = () => {
 
     const { control, register, setValue, handleSubmit, formState: { errors } } = useForm();
 
-    const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);
+    const isCheckingData = useMemo(() => isCheckingForm === true, [ isCheckingForm ]);
 
     const [printType, setPrintType] = useState("invitacion");
 
     const validateFile = (file) => {
         if (!file) return true;
         
-        const allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip', 'rar', 'nef'];
+        const allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip', 'rar', 'nef', 'mp4', 'mov', 'mp3', 'csv'];
         const type = file[0].name.split('.').pop().toLowerCase();
         const maxSize = 1024 * 1024 * 10; //? 10MB
         
@@ -150,6 +149,8 @@ export const PrintRequestPage = () => {
         const printSize = xSize && ySize ? { xSize, ySize } : { size: rest.printSize };
 
         rest.printSize = printSize;
+
+        console.log('enviando...');
 
         startSavingDesign(rest);
     });
@@ -216,11 +217,11 @@ export const PrintRequestPage = () => {
                 }
                 <div className="flex gap-4">
                     <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="printContent">Contenido de la Impresión</label>
+                        <label htmlFor="printDescription">Contenido de la Impresión</label>
                         <textarea
                             className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition resize-none`}
-                            name="printContent"
-                            { ...register('printContent', { 
+                            name="printDescription"
+                            { ...register('printDescription', { 
                                 required: {
                                     value: true,
                                     message: 'Este campo es obligatorio'
@@ -234,7 +235,7 @@ export const PrintRequestPage = () => {
                             rows={ 5 }
                         />
                         { 
-                            errors.printContent && <ErrorComponent error={ errors.printContent.message } />
+                            errors.printDescription && <ErrorComponent error={ errors.printDescription.message } />
 
                         }
                     </div>
@@ -243,7 +244,7 @@ export const PrintRequestPage = () => {
                         <textarea
                             className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition resize-none`}
                             name="description"
-                            { ...register('printDescription', { 
+                            { ...register('description', { 
                                 required: {
                                     value: true,
                                     message: 'Este campo es obligatorio'
@@ -257,7 +258,7 @@ export const PrintRequestPage = () => {
                             rows={ 5 }
                         />
                         { 
-                            errors.printDescription && <ErrorComponent error={ errors.printDescription.message } />
+                            errors.description && <ErrorComponent error={ errors.description.message } />
                         }
                     </div>
                 </div>

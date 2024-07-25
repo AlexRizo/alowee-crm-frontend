@@ -2,7 +2,7 @@ import { CalendarIcon, ClockIcon, UserIcon } from "@heroicons/react/24/outline"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 
-export const PostModal = ({ data }) => {
+export const RequestModal = ({ data }) => {
 
     const isRetarded = () => {
         if (new Date(data.deadline) < new Date() && !data.status) return true;
@@ -13,7 +13,7 @@ export const PostModal = ({ data }) => {
     return (
         <>
             <div className="flex flex-col mb-3">
-                <h1 className="text-xl font-medium mb-1">{ data.title }</h1>
+                <h1 className="text-xl font-medium mb-1 capitalize">{ data.type === 'print' ? `Nueva solicitud | ${ data.printType }` : data.title }</h1>
                 <span className="flex flex-row gap-2 text-gray-500">
                     <CalendarIcon className="h-5" />
                     <span>

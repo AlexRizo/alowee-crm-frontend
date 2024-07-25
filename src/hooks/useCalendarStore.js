@@ -98,7 +98,7 @@ export const useCalendarStore = () => {
     };
 
     const startSavingDesign = async(designData) => {
-        onCheckingForm();
+        dispatch(onCheckingForm());
 
         const DesignFormData = new FormData();
 
@@ -114,8 +114,6 @@ export const useCalendarStore = () => {
                 DesignFormData.append(key, designData[key]);
             }
         }
-
-        console.log({ DesignFormData });
 
         if (designData.id) {
             // Update
@@ -135,6 +133,7 @@ export const useCalendarStore = () => {
                     text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
                     icon: 'success'
                 });
+                dispatch(onCheckingForm());
                 navigate('/calendar');
             } catch (error) {
                 console.log(error);
@@ -149,7 +148,6 @@ export const useCalendarStore = () => {
                 }, 1000);
             }
         }
-        onCheckingForm();
     }
 
     const startLoadingEvents = async() => {
