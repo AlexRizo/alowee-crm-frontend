@@ -57,8 +57,8 @@ export const useCalendarStore = () => {
                 postFormData.append('file', postData.file[0]);
             } else if (key === 'socialNetworks') {
                 postFormData.append('socialNetworks', JSON.stringify(postData.socialNetworks));
-            } else if (key === 'postDate') {
-                postFormData.append('postDate', postData.postDate.toISOString());
+            } else if (key === 'deadline') {
+                postFormData.append('deadline', postData.deadline.toISOString());
             } else {
                 postFormData.append(key, postData[key]);
             }
@@ -108,8 +108,8 @@ export const useCalendarStore = () => {
             
             } else if (key === 'printSize') {
                 DesignFormData.append('printSize', JSON.stringify(designData.printSize));
-            } else if (key === 'printDate') {
-                DesignFormData.append('printDate', designData.printDate.toISOString());
+            } else if (key === 'deadline') {
+                DesignFormData.append('deadline', designData.deadline.toISOString());
             } else {
                 DesignFormData.append(key, designData[key]);
             }

@@ -28,7 +28,7 @@ export const CalendarPage = () => {
         const style = {
             backgroundColor: event.user._id === user.uid ? '#00796b' : '#4B5563',
             borderRadius: '5px',
-            opacity: (event?.end || event?.postDate) < subDays(new Date(), 1) ? 0.6 : 1.0,
+            opacity: (event?.end || event?.deadline) < subDays(new Date(), 1) ? 0.6 : 1.0,
             color: 'white',
         }
     
@@ -38,12 +38,12 @@ export const CalendarPage = () => {
     };
 
     const eventTypeStart = (event) => {
-        const start = event.type === 'event' ? event.start : event.postDate ? event.PostDate : event.printDate;
+        const start = event.type === 'event' ? event.start : event.deadline;
         return start;
     }
 
     const eventTypeEnd = (event) => {
-        const end = event.type === 'event' ? event.end : event.postDate ? event.PostDate : event.printDate;
+        const end = event.type === 'event' ? event.end : event.deadline;
         return end;
     }
     

@@ -145,7 +145,7 @@ export const PostRequestPage = () => {
                         <label htmlFor="start">Fecha de publicación *</label> 
                         <Controller
                             control={ control }
-                            name="postDate"
+                            name="deadline"
                             rules={{ 
                                 required: {
                                     value: true,
@@ -160,7 +160,7 @@ export const PostRequestPage = () => {
                                     dateFormat='Pp'
                                     showTimeSelect
                                     locale='es'
-                                    name="postDate"
+                                    name="deadline"
                                     timeCaption="Hora"
                                     minDate={ new Date() }
                                     onChange={ (event) => field.onChange(event) }
@@ -169,9 +169,9 @@ export const PostRequestPage = () => {
                             )}
                         />
                         {
-                            errors.postDate && <span className="text-red-500 text-sm flex gap-1 mt-1">
+                            errors.deadline && <span className="text-red-500 text-sm flex gap-1 mt-1">
                                 <ExclamationCircleIcon className="h-5 w-5" />
-                                { errors.postDate.message }.
+                                { errors.deadline.message }.
                             </span>
                         }
                     </div>

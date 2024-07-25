@@ -5,7 +5,7 @@ import { es } from "date-fns/locale"
 export const PostModal = ({ data }) => {
 
     const isRetarded = () => {
-        if (new Date(data.postDate) < new Date() && !data.status) return true;
+        if (new Date(data.deadline) < new Date() && !data.status) return true;
         console.log({ status: data.status });
         return false;
     };
@@ -18,7 +18,7 @@ export const PostModal = ({ data }) => {
                     <CalendarIcon className="h-5" />
                     <span>
                         {
-                            format(data.postDate, 'PPp', { locale: es })
+                            format(data.deadline, 'PPp', { locale: es })
                         }
                     </span>
                 </span>

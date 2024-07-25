@@ -11,7 +11,7 @@ export const convertDateEvent = (events) => {
 
 export const convertDatePost = (posts) => {
     return posts.map(post => {
-        post.postDate = parseISO(post.postDate);
+        post.deadline = parseISO(post.deadline);
         
         return post;
     })
@@ -19,7 +19,7 @@ export const convertDatePost = (posts) => {
 
 export const convertDatePrint = (prints) => {
     return prints.map(print => {
-        print.printDate = parseISO(print.printDate);
+        print.deadline = parseISO(print.deadline);
         
         return print;
     })

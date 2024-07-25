@@ -122,7 +122,7 @@ const InvitacionComponent = ({ setValue, register, errors }) => {
     );
 };
 
-export const DesignRequestPage = () => {
+export const PrintRequestPage = () => {
     const { startSavingDesign, message } = useCalendarStore();
     const { isCheckingForm } = useUiStore();
 
@@ -230,7 +230,7 @@ export const DesignRequestPage = () => {
                                     message: 'Sólo se permiten 1020 caracteres'
                                 }
                             })}
-                            placeholder="Descripción de la solicitud"
+                            placeholder="Contenido de la impresión"
                             rows={ 5 }
                         />
                         { 
@@ -266,7 +266,7 @@ export const DesignRequestPage = () => {
                         <label htmlFor="start">Fecha Estimada de Entrega</label> 
                         <Controller
                             control={ control }
-                            name="printDate"
+                            name="deadline"
                             rules={{ 
                                 required: {
                                     value: true,
@@ -281,7 +281,7 @@ export const DesignRequestPage = () => {
                                     dateFormat='Pp'
                                     showTimeSelect
                                     locale='es'
-                                    name="printDate"
+                                    name="deadline"
                                     timeCaption="Hora"
                                     minDate={ new Date() }
                                     onChange={ (event) => field.onChange(event) }
@@ -290,7 +290,7 @@ export const DesignRequestPage = () => {
                             )}
                         />
                         {
-                            errors.printDate && <ErrorComponent error={ errors.printDate.message } />
+                            errors.deadline && <ErrorComponent error={ errors.deadline.message } />
                         }
                     </div>
                 </div>
