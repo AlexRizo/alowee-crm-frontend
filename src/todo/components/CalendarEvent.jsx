@@ -1,10 +1,10 @@
 import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline"
 
 export const CalendarEvent = ({ event }) => {
-    const { title, status, printType, type} = event;    
+    const { title, status, type, printType } = event;    
     return (
         <>
-            <strong className="capitalize">{ type !== 'print' ? title : printType  }</strong>
+            <strong className="capitalize">{ title ? title : `Diseño: ${ event?.printType ? printType : type }`  }</strong>
             <span className="flex gap-1">
                 {
                     status

@@ -4,3 +4,4 @@ export * from './RequestPage';
 export * from './EventRequestPage';
 export * from './PostRequestPage';
 export * from './PrintRequestPage';
+export * from './DigitalRequestPage';

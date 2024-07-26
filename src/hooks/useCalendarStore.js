@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearMessage, onAddNewEvent, onCheckingForm, onDeleteEvent, onErrorResponse, onLoadEvents, onLoadlatestEvents, onSetActiveEvent, onUpdateEvent } from "../store";
 import { todoApi } from "../api";
-import { convertDateEvent, convertDatePost, convertDatePrint, fireModal } from "../helpers";
+import { convertDateEvent, fireModal } from "../helpers";
 
 export const useCalendarStore = () => {
     const dispatch = useDispatch();
@@ -97,7 +97,7 @@ export const useCalendarStore = () => {
         onCheckingForm();
     };
 
-    const startSavingDesign = async(designData) => {
+    const startSavingPrint = async(designData) => {
         dispatch(onCheckingForm());
 
         const DesignFormData = new FormData();
@@ -150,29 +150,77 @@ export const useCalendarStore = () => {
         }
     }
 
-    const startLoadingEvents = async() => {
+    const startSavingDigital = async(designData) => {
+        dispatch(onCheckingForm());
+
+        const DesignFormData = new FormData();
+
+        for (const key in designData) {
+            if (key === 'file') {
+                if (designData.file) DesignFormData.append('file', designData.file[0]);
+            } else if (key === 'deadline') {
+                DesignFormData.append('deadline', designData.deadline.toISOString());
+            } else {
+                DesignFormData.append(key, designData[key]);
+            }
+        }
+
+        if (designData.id) {
+            // Update
+            dispatch(onUpdateEvent(designData));
+        } else {
+            // Create
+            try {
+                const { data } = await todoApi.post('/events/new-design-req/digital', DesignFormData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                dispatch(onAddNewEvent({ id: data.digital.id, ...designData, user, status: false, type: 'post' }));
+                fireModal({
+                    title: 'Tarea creada',
+                    text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
+                    icon: 'success'
+                });
+                navigate('/calendar');
+            } catch (error) {
+                console.log(error);
+                dispatch(onErrorResponse(
+                    error.response?.data?.message ||
+                    Object.values(error.response?.data?.errors).map((error) => error.msg).join('<br/>') ||
+                    'Error desconocido'
+                ));
+
+                setTimeout(() => {
+                    dispatch(clearMessage());
+                }, 1000);
+            }
+
+            dispatch(onCheckingForm());
+        }
+    }
+
+    const getEvents = async(custom) => {
         try {
-            const { data } = await todoApi.get('/events');
-            const events = convertDateEvent(data.response.events);
-            const posts = convertDatePost(data.response.posts);
-            const prints = convertDatePrint(data.response.prints);
-            
-            dispatch(onLoadEvents([ ...events, ...posts, ...prints ]));
+            const { data } = await todoApi.get(`/events${ custom ? '?' + custom : '' }`);
+            const events = convertDateEvent(data.response.events, 'event');
+            const posts = convertDateEvent(data.response.posts, 'post');
+            const prints = convertDateEvent(data.response.prints, 'print');
+            const digital = convertDateEvent(data.response.digital, 'digital');
+
+            return [ ...events, ...posts, ...prints, ...digital ];
         } catch (error) {
             console.log(error);
         }
     };
 
-    const startLoadingLatestEvents = async() => {
-        try {
-            const { data } = await todoApi.get('/events');
-            const events = convertDateEvent(data.response.events);
-            const posts = convertDatePost(data.response.posts);
+    const startLoadingEvents = async() => {
+        dispatch(onLoadEvents(await getEvents()));
+    };
 
-            dispatch(onLoadlatestEvents([...events, ...posts]));
-        } catch (error) {
-            console.log(error);
-        }
+    const startLoadingLatestEvents = async() => {
+        dispatch(onLoadlatestEvents(await getEvents()));
     };
 
     const startDeletingEvent = () => {
@@ -197,7 +245,10 @@ export const useCalendarStore = () => {
         startSavingPost,
 
         //?! Design
-        startSavingDesign,
+        startSavingPrint,
+
+        //?! Digital
+        startSavingDigital,
         
         //? Load
         startLoadingEvents,
