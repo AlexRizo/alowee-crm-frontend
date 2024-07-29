@@ -65,7 +65,7 @@ export const DesignModal = () => {
                     <span>Digital</span>
                 </button>
                 <button
-                    onClick={ () => handleOption('t-shirts') } 
+                    onClick={ () => handleOption('t-shirt') } 
                     className={`flex gap-1 border rounded p-2 justify-center hover:bg-black/5 transition focus:bg-black/8 ${ option === 't-shirts' && 'bg-black/10' }`}>
                     <TagIcon className='h-6' />
                     <span>Playeras</span>

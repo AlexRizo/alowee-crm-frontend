@@ -12,6 +12,8 @@ export const CalendarPage = () => {
     const { events, setActiveEvent, startLoadingEvents } = useCalendarStore();
     const { openModal } = useUiStore();
     const { user } = useSelector(state => state.auth);
+
+    const [ currentRange, setCurrentRange ] = useState({ start: new Date(), end: new Date() });
     
     const onDoubleClick = (e) => {
         openModal();
@@ -46,10 +48,18 @@ export const CalendarPage = () => {
         const end = event.type === 'event' ? event.end : event.deadline;
         return end;
     }
+
+    const handleRangeChange = (range) => {
+        if (Array.isArray(range)) {
+            setCurrentRange({ start: range[0], end: range[range.length - 1] });
+        } else {
+          setCurrentRange(range);
+        }
+    };
     
     useEffect(() => {
-        startLoadingEvents();
-    }, []);
+        startLoadingEvents(currentRange.start, currentRange.end);
+    }, [currentRange]);
     
     return (
         <>
@@ -70,6 +80,7 @@ export const CalendarPage = () => {
                     onDoubleClickEvent={ onDoubleClick }
                     onSelectEvent={ onSelect }
                     onView={ onView }
+                    onRangeChange={ handleRangeChange }
                 />
             </div>
             

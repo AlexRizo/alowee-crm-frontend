@@ -196,10 +196,59 @@ export const useCalendarStore = () => {
                     dispatch(clearMessage());
                 }, 1000);
             }
-
             dispatch(onCheckingForm());
         }
     }
+
+    const startSavingTshirt = async(designData) => {
+        dispatch(onCheckingForm());
+
+        const DesignFormData = new FormData();
+
+        for (const key in designData) {
+            if (key === 'file') {
+                if (designData.file) DesignFormData.append('file', designData.file[0]);
+            } else if (key === 'deadline') {
+                DesignFormData.append('deadline', designData.deadline.toISOString());
+            } else {
+                DesignFormData.append(key, designData[key]);
+            }
+        }
+
+        if (designData.id) {
+            // Update
+            dispatch(onUpdateEvent(designData));
+        } else {
+            // Create
+            try {
+                const { data } = await todoApi.post('/events/new-design-req/t-shirt', DesignFormData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                dispatch(onAddNewEvent({ id: data.tshirt.id, ...designData, user, status: false, type: 'post' }));
+                fireModal({
+                    title: 'Tarea creada',
+                    text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
+                    icon: 'success'
+                });
+                navigate('/calendar');
+            } catch (error) {
+                console.log(error);
+                dispatch(onErrorResponse(
+                    error.response?.data?.message ||
+                    Object.values(error.response?.data?.errors).map((error) => error.msg).join('<br/>') ||
+                    'Error desconocido'
+                ));
+
+                setTimeout(() => {
+                    dispatch(clearMessage());
+                }, 1000);
+            }
+            dispatch(onCheckingForm());
+        }
+    };
 
     const getEvents = async(custom) => {
         try {
@@ -208,15 +257,16 @@ export const useCalendarStore = () => {
             const posts = convertDateEvent(data.response.posts, 'post');
             const prints = convertDateEvent(data.response.prints, 'print');
             const digital = convertDateEvent(data.response.digital, 'digital');
+            const tshirts = convertDateEvent(data.response.tshirts, 'tshirt');
 
-            return [ ...events, ...posts, ...prints, ...digital ];
+            return [ ...events, ...posts, ...prints, ...digital, ...tshirts ];
         } catch (error) {
             console.log(error);
         }
     };
 
-    const startLoadingEvents = async() => {
-        dispatch(onLoadEvents(await getEvents()));
+    const startLoadingEvents = async(start, end) => {
+        dispatch(onLoadEvents(await getEvents(`start=${ start.toISOString() }&end=${ end.toISOString() }`)));
     };
 
     const startLoadingLatestEvents = async() => {
@@ -249,6 +299,9 @@ export const useCalendarStore = () => {
 
         //?! Digital
         startSavingDigital,
+
+        //?! Tshirt
+        startSavingTshirt,
         
         //? Load
         startLoadingEvents,

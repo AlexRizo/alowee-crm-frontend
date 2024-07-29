@@ -5,3 +5,4 @@ export * from './EventRequestPage';
 export * from './PostRequestPage';
 export * from './PrintRequestPage';
 export * from './DigitalRequestPage';
+export * from './TshirtRequestPage';
