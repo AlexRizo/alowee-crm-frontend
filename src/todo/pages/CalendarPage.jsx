@@ -5,16 +5,22 @@ import { CalendarEvent, CalendarModal } from '../components'
 import { useCalendarStore, useUiStore } from '../../hooks'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { subDays } from 'date-fns'
+import { set, subDays } from 'date-fns'
+import { useMemo } from 'react'
 
 export const CalendarPage = () => {
-    const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'week' );
+    const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'month' );
     const { events, setActiveEvent, startLoadingEvents } = useCalendarStore();
     const { openModal } = useUiStore();
     const { user } = useSelector(state => state.auth);
 
+    //? Los meses van del 0 al 11 (Enero a Diciembre), siendo 0 Enero y 11 Diciembre;
+    const [ currentMonth, setCurrentMonth ] = useState(new Date().getMonth());
+    const [ currentDay, setCurrentDay ] = useState(new Date());
     const [ currentRange, setCurrentRange ] = useState({ start: new Date(), end: new Date() });
-    
+
+    const cm = useMemo(() => { return currentMonth }, [currentMonth]);
+
     const onDoubleClick = (e) => {
         openModal();
     };
@@ -49,17 +55,31 @@ export const CalendarPage = () => {
         return end;
     }
 
-    const handleRangeChange = (range) => {
-        if (Array.isArray(range)) {
-            setCurrentRange({ start: range[0], end: range[range.length - 1] });
-        } else {
-          setCurrentRange(range);
-        }
+    const handleRangeChange = () => {        
+        // Calcular el primer día del mes anterior y el último día del mes siguiente
+        const startDate = new Date(currentDay.getFullYear(), currentDay.getMonth() - 1, 1);
+        const endDate = new Date(currentDay.getFullYear(), currentDay.getMonth() + 2, 0);
+
+        console.log({ startDate, endDate });
+        setCurrentRange({ start: startDate, end: endDate });
     };
     
+    const handleNavChange = (date) => {
+        setCurrentMonth(date.getMonth());
+        setCurrentDay(new Date(date));
+        console.log(currentMonth, currentDay, currentRange);
+    };
+
     useEffect(() => {
+        handleRangeChange();
         startLoadingEvents(currentRange.start, currentRange.end);
-    }, [currentRange]);
+    }, []);
+    
+    
+    useEffect(() => {
+        handleRangeChange();
+        startLoadingEvents(currentRange.start, currentRange.end);
+    }, [cm]);
     
     return (
         <>
@@ -80,7 +100,7 @@ export const CalendarPage = () => {
                     onDoubleClickEvent={ onDoubleClick }
                     onSelectEvent={ onSelect }
                     onView={ onView }
-                    onRangeChange={ handleRangeChange }
+                    onNavigate={ handleNavChange }
                 />
             </div>
             

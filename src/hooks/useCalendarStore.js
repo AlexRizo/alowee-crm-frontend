@@ -250,6 +250,56 @@ export const useCalendarStore = () => {
         }
     };
 
+    const startSavingOther = async(designData) => {
+        dispatch(onCheckingForm());
+
+        const DesignFormData = new FormData();
+
+        for (const key in designData) {
+            if (key === 'file') {
+                if (designData.file) DesignFormData.append('file', designData.file[0]);
+            } else if (key === 'deadline') {
+                DesignFormData.append('deadline', designData.deadline.toISOString());
+            } else {
+                DesignFormData.append(key, designData[key]);
+            }
+        }
+
+        if (designData.id) {
+            // Update
+            dispatch(onUpdateEvent(designData));
+        } else {
+            // Create
+            try {
+                const { data } = await todoApi.post('/events/new-design-req/other', DesignFormData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                dispatch(onAddNewEvent({ id: data.other.id, ...designData, user, status: false, type: 'post' }));
+                fireModal({
+                    title: 'Tarea creada',
+                    text: 'La tarea ha sido creada y enviada para su revisión. Pronto recibirás una respuesta.',
+                    icon: 'success'
+                });
+                navigate('/calendar');
+            } catch (error) {
+                console.log(error);
+                dispatch(onErrorResponse(
+                    error.response?.data?.message ||
+                    Object.values(error.response?.data?.errors).map((error) => error.msg).join('<br/>') ||
+                    'Error desconocido'
+                ));
+
+                setTimeout(() => {
+                    dispatch(clearMessage());
+                }, 1000);
+            }
+            dispatch(onCheckingForm());
+        }
+    };
+
     const getEvents = async(custom) => {
         try {
             const { data } = await todoApi.get(`/events${ custom ? '?' + custom : '' }`);
@@ -258,8 +308,9 @@ export const useCalendarStore = () => {
             const prints = convertDateEvent(data.response.prints, 'print');
             const digital = convertDateEvent(data.response.digital, 'digital');
             const tshirts = convertDateEvent(data.response.tshirts, 'tshirt');
+            const others = convertDateEvent(data.response.others, 'other');
 
-            return [ ...events, ...posts, ...prints, ...digital, ...tshirts ];
+            return [ ...events, ...posts, ...prints, ...digital, ...tshirts, ...others ];
         } catch (error) {
             console.log(error);
         }
@@ -269,8 +320,8 @@ export const useCalendarStore = () => {
         dispatch(onLoadEvents(await getEvents(`start=${ start.toISOString() }&end=${ end.toISOString() }`)));
     };
 
-    const startLoadingLatestEvents = async() => {
-        dispatch(onLoadlatestEvents(await getEvents()));
+    const startLoadingLatestEvents = async(start, end) => {
+        dispatch(onLoadlatestEvents(await getEvents(`start=${ start.toISOString() }&end=${ end.toISOString() }`)));
     };
 
     const startDeletingEvent = () => {
@@ -302,6 +353,9 @@ export const useCalendarStore = () => {
 
         //?! Tshirt
         startSavingTshirt,
+
+        //?! Other
+        startSavingOther,
         
         //? Load
         startLoadingEvents,

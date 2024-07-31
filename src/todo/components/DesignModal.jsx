@@ -71,7 +71,7 @@ export const DesignModal = () => {
                     <span>Playeras</span>
                 </button>
                 <button
-                    onClick={ () => handleOption('others') } 
+                    onClick={ () => handleOption('other') } 
                     className={`flex gap-1 border rounded p-2 justify-center hover:bg-black/5 transition focus:bg-black/8 ${ option === 'others' && 'bg-black/10' }`}>
                     <CubeIcon className='h-6' />
                     <span>Otros</span>

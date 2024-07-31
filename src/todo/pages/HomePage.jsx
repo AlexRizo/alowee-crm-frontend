@@ -4,9 +4,12 @@ import { CardData, CardPending } from "../components"
 
 export const HomePage = () => {
     const { latestEvents, startLoadingLatestEvents } = useCalendarStore();
+    const now = new Date(),
+          start = new Date(now.getFullYear(), now.getMonth(), 1),
+          end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
     useEffect(() => {
-        startLoadingLatestEvents();
+        startLoadingLatestEvents(start, end);
     }, []);
     
     return (
