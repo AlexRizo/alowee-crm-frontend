@@ -4,8 +4,9 @@ import DatePicker, { registerLocale } from "react-datepicker"
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
 import { useCalendarStore, useUiStore } from "../../hooks";
-import { fireModal } from "../../helpers";
+import { fireModal, validateFile } from "../../helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { ErrorComponent } from "../components";
 
 registerLocale('es', es);
 
@@ -31,20 +32,6 @@ export const PostRequestPage = () => {
         return true;
     };
 
-    
-    const validateFile = (file) => {
-        if (!file) return true;
-        
-        const allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip', 'rar', 'nef'];
-        const type = file[0].name.split('.').pop().toLowerCase();
-        const maxSize = 1024 * 1024 * 25; //? 25MB
-
-        console.log({file});
-        
-        if (!allowedTypes.includes(type)) return 'Tipo de archivo no permitido. Sólo se permiten archivos de tipo: jpg, jpeg, png, pdf, doc, docx, xls, xlsx, ppt, pptx, txt, zip, rar';
-        if (file[0].size > maxSize) return 'El archivo excede el tamaño permitido. Sólo se permiten archivos de hasta 25MB';
-    };
-    
     const onSubmit = handleSubmit((data) => {
         const { facebook, instagram, otro, ...newData } = data;
         if (!validateCheckbox([facebook, instagram, otro])) return;
@@ -85,10 +72,8 @@ export const PostRequestPage = () => {
                         placeholder="Títlo de la publicación"
                     />
                     { 
-                        errors.title && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                            <ExclamationCircleIcon className="h-5 w-5" />
-                            { errors.title.message }.
-                        </span> 
+                        errors.title && <ErrorComponent error={ errors.title.message } />
+
                     }
                 </div>
                 <div className="flex flex-col gap-1 w-full">
@@ -110,10 +95,7 @@ export const PostRequestPage = () => {
                         rows={ 5 }
                     />
                     { 
-                        errors.postDescription && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                            <ExclamationCircleIcon className="h-5 w-5" />
-                            { errors.postDescription.message }.
-                        </span> 
+                        errors.postDescription && <ErrorComponent error={ errors.postDescription.message } />
                     }
                 </div>
                 <div className="flex flex-col gap-1 w-full">
@@ -134,10 +116,7 @@ export const PostRequestPage = () => {
                         )}
                     />
                     { 
-                        errors.file && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                            <ExclamationCircleIcon className="h-5 w-5" />
-                            { errors.file.message }.
-                        </span> 
+                        errors.file && <ErrorComponent error={ errors.file.message } />
                     }
                 </div>
                 <div className="flex gap-4">
@@ -169,10 +148,7 @@ export const PostRequestPage = () => {
                             )}
                         />
                         {
-                            errors.deadline && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                                <ExclamationCircleIcon className="h-5 w-5" />
-                                { errors.deadline.message }.
-                            </span>
+                            errors.deadline && <ErrorComponent error={ errors.deadline.message } />
                         }
                     </div>
                 </div>
@@ -191,10 +167,7 @@ export const PostRequestPage = () => {
                         <label htmlFor="Otro" className="mr-2 text-gray-700">Otro</label>
                     </div>
                     {
-                        socialNetworkError && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                            <ExclamationCircleIcon className="h-5 w-5" />
-                            { socialNetworkError }.
-                        </span>
+                        socialNetworkError && <ErrorComponent error={ socialNetworkError } />
                     }
                 </div>
                 <div className="flex flex-col gap-1 w-full">
@@ -215,11 +188,8 @@ export const PostRequestPage = () => {
                         placeholder="Descripción de la solicitud"
                         rows={ 5 }
                     />
-                    { 
-                        errors.description && <span className="text-red-500 text-sm flex gap-1 mt-1">
-                            <ExclamationCircleIcon className="h-5 w-5" />
-                            { errors.description.message }.
-                        </span> 
+                    {
+                        errors.description && <ErrorComponent error={ errors.description } />
                     }
                 </div>
                 <button className="p-4 bg-indigo-800/90 rounded hover:bg-indigo-600 focus:bg-indigo-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>

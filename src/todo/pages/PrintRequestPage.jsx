@@ -4,23 +4,23 @@ import DatePicker, { registerLocale } from "react-datepicker"
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
 import { useCalendarStore, useUiStore } from "../../hooks";
-import { fireModal } from "../../helpers";
+import { fireModal, validateFile } from "../../helpers";
 import { ErrorComponent } from "../components";
 
 registerLocale('es', es);
 
-const DocumentoComponent = ({ setValue }) => {
-    const [printSize, setPrintSize] = useState('');
-
-    const handleSelect = ({ target }) => {
-        setPrintSize(target.value)
-        setValue('printSize', printSize)
-    }
-    
+const DocumentoComponent = ({ register, errors }) => {
     return (
         <div className="flex flex-col gap-1 w-full">
             <label htmlFor="printSize">Tamaño del Documento *</label>
-            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+            <select 
+                name="printSize"
+                id="printZize"
+                className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
+                {...register('printSize', {
+                    validate: value => value !== "" || "Debe seleccionar una medida"
+                })}
+            >
                 <option value="" className="text-gray-500">-SELECCIONA UNA MEDIDA-</option>
                 <option value="a4" className="text-gray-500">A4 (8.27" x 11.69")</option>
                 <option value="a5" className="text-gray-500">A5 (5.83" x 8.27")</option>
@@ -28,32 +28,38 @@ const DocumentoComponent = ({ setValue }) => {
                 <option value="legal" className="text-gray-500">Legal (8.5" x 14")</option>
                 <option value="oficio" className="text-gray-500">Oficio (8.5" x 13")</option>
             </select>
+            {
+                errors.printSize && <ErrorComponent error={ errors.xSize.message } />
+            }
         </div>
     );
 };
 
-const FolletoComponent = ({ setValue }) => {
-    const [printSize, setPrintSize] = useState('a7');
-
-    const handleSelect = ({ target }) => {
-        setPrintSize(target.value)
-        setValue('printSize', printSize)
-    }
-    
+const FolletoComponent = ({ register, errors }) => {
     return (
         <div className="flex flex-col gap-1 w-full">
             <label htmlFor="printSize">Tamaño del Folleto *</label>
-            <select value={ printSize } onChange={ handleSelect } name="printSize" id="printZize" className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500">
+            <select 
+                name="printSize" 
+                id="printZize" 
+                className="w-full p-2 bg-white border focus:outline-none focus:ring-2 focus:ring-sky-700 rounded transition disabled:bg-gray-200 disabled:text-gray-500"
+                {...register('printSize', {
+                    validate: value => value !== "" || "Debe seleccionar una medida"
+                })}
+            >
                 <option value="a4" className="text-gray-500">A4 (8.27" x 11.69")</option>
                 <option value="dl" className="text-gray-500">DL (3.9" x 8.2")</option>
                 <option value="carta" className="text-gray-500">Carta (8.5" x 11")</option>
                 <option value="legal" className="text-gray-500">Legal (8.5" x 14")</option>
             </select>
+            {
+                errors.printSize && <ErrorComponent error={ errors.xSize.message } />
+            }
         </div>
     );
 };
 
-const LonaComponent = ({ register }) => {
+const LonaComponent = ({ register, errors }) => {
     
     return (
         <div className="flex gap-4">
@@ -68,6 +74,9 @@ const LonaComponent = ({ register }) => {
                     placeholder="Medida de la base"
                     { ...register('xSize') }
                 />
+            {
+                errors.xSize && <ErrorComponent error={ errors.xSize.message } />
+            }
             </div>
             <div className="flex flex-col gap-1 w-full">
                 <label htmlFor="ySize">Altura *</label>
@@ -89,12 +98,15 @@ const LonaComponent = ({ register }) => {
                         }
                     }) }
                 />
+                {
+                    errors.ySize && <ErrorComponent error={ errors.ySize.message } />
+                }
             </div>
         </div>
     );
 };
 
-const InvitacionComponent = ({ setValue, register, errors }) => {
+const InvitacionComponent = ({ register, errors }) => {
     
     return (
         <div className="flex flex-col gap-1 w-full">
@@ -130,27 +142,13 @@ export const PrintRequestPage = () => {
     const isCheckingData = useMemo(() => isCheckingForm === true, [ isCheckingForm ]);
 
     const [printType, setPrintType] = useState("invitacion");
-
-    const validateFile = (file) => {
-        if (!file) return true;
-        
-        const allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip', 'rar', 'nef', 'mp4', 'mov', 'mp3', 'csv'];
-        const type = file[0].name.split('.').pop().toLowerCase();
-        const maxSize = 1024 * 1024 * 10; //? 10MB
-        
-        if (!allowedTypes.includes(type)) return 'Tipo de archivo no permitido. Sólo se permiten archivos de tipo: ' + allowedTypes.join(', ');
-        if (file[0].size > maxSize) return 'El archivo excede el tamaño permitido. Sólo se permiten archivos de hasta ' + maxSize / 1024 / 1024 + ' MB';
-    };
     
     const onSubmit = handleSubmit((data) => {
-        data.designType = 'impresion';
         const { xSize, ySize, ...rest } = data;
 
         const printSize = xSize && ySize ? { xSize, ySize } : { size: rest.printSize };
 
         rest.printSize = printSize;
-
-        console.log('enviando...');
 
         startSavingDesign(rest);
     });
@@ -209,11 +207,11 @@ export const PrintRequestPage = () => {
                     </div>
                 </div>
                 {
-                    printType === 'invitacion' ? <InvitacionComponent setValue={ setValue } register={ register } errors={ errors } /> 
-                                : printType === 'lona'       ? <LonaComponent setValue={ setValue } register={ register } />
-                                : printType === 'folleto'    ? <FolletoComponent setValue={ setValue } />
-                                : printType === 'documento oficial' ? <DocumentoComponent setValue={ setValue } />
-                                : printType === 'volante'    ? <FolletoComponent setValue={ setValue } /> : 'Ha ocurrido un error inesperado. Por favor, recarga la página y vuelve a intentarlo.'
+                    printType === 'invitacion' ? <InvitacionComponent register={ register } errors={ errors } /> 
+                                : printType === 'lona'       ? <LonaComponent register={ setValue } errors={ register } />
+                                : printType === 'folleto'    ? <FolletoComponent register={ setValue } errors={ register } />
+                                : printType === 'documento oficial' ? <DocumentoComponent register={ setValue } errors={ register } />
+                                : printType === 'volante'    ? <FolletoComponent register={ setValue } errors={ register } /> : 'Ha ocurrido un error inesperado. Por favor, recarga la página y vuelve a intentarlo.'
                 }
                 <div className="flex gap-4">
                     <div className="flex flex-col gap-1 w-full">

@@ -20,8 +20,6 @@ export const TshirtRequestPage = () => {
     const isCheckingData = useMemo(() => isCheckingForm === true, [ isCheckingForm ]);
     
     const onSubmit = handleSubmit((data) => {
-        data.designType = 'tshirt';
-
         startSavingTshirt(data);
     });
     

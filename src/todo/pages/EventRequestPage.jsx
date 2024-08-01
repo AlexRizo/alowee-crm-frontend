@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { addHours } from "date-fns";
 import { useCalendarStore, useUiStore } from "../../hooks";
 import { fireModal } from "../../helpers";
+import { useForm } from "react-hook-form";
 
 registerLocale('es', es);
 
@@ -14,14 +15,7 @@ export const EventRequestPage = () => {
 
     const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);
 
-    const [formValues, setFormValues] = useState({
-        title: '',
-        requiriments: [],
-        start: new Date(),
-        end: addHours(new Date(), 2),
-        description: '',
-        status: false
-    });
+    const { control, register, handleSubmit, formState: { errors } } = useForm();
 
     const [formValidation, setFormValidation] = useState({
         title: null,
@@ -62,8 +56,7 @@ export const EventRequestPage = () => {
         });
     }
 
-    const onSubmit = (event) => {
-        event.preventDefault();
+    const onSubmit = handleSubmit((data) => {
 
         const { title, start, end, requiriments, description } = formValues;
 
@@ -86,7 +79,7 @@ export const EventRequestPage = () => {
         }
 
         startSavingEvent(formValues);
-    }
+    })
 
     const cleanError = (target) => {
         setFormValidation({

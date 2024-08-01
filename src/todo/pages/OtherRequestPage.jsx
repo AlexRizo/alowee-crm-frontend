@@ -18,8 +18,6 @@ export const OtherRequestPage = () => {
     const isCheckingData = useMemo(() => isCheckingForm === true, [ isCheckingForm ]);
     
     const onSubmit = handleSubmit((data) => {
-        data.designType = 'otro';
-
         startSavingOther(data);
     });
     
