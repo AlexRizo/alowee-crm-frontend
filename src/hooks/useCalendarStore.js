@@ -309,7 +309,7 @@ export const useCalendarStore = () => {
             const digital = convertDateEvent(data.response.digital, 'digital');
             const tshirts = convertDateEvent(data.response.tshirts, 'tshirt');
             const others = convertDateEvent(data.response.others, 'other');
-
+            
             return [ ...events, ...posts, ...prints, ...digital, ...tshirts, ...others ];
         } catch (error) {
             console.log(error);

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { set, subDays } from 'date-fns'
 import { useMemo } from 'react'
+import { useCallback } from 'react'
 
 export const CalendarPage = () => {
     const [ lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'month' );
@@ -55,31 +56,26 @@ export const CalendarPage = () => {
         return end;
     }
 
-    const handleRangeChange = () => {        
+    const handleRangeChange = useCallback(() => {
         // Calcular el primer día del mes anterior y el último día del mes siguiente
-        const startDate = new Date(currentDay.getFullYear(), currentDay.getMonth() - 1, 1);
-        const endDate = new Date(currentDay.getFullYear(), currentDay.getMonth() + 2, 0);
-
-        console.log({ startDate, endDate });
+        const startDate = new Date(currentDay.getFullYear(), cm - 1, 1);
+        const endDate = new Date(currentDay.getFullYear(), cm + 2, 0);
+    
         setCurrentRange({ start: startDate, end: endDate });
-    };
+    }, [currentDay, cm]);
     
     const handleNavChange = (date) => {
-        setCurrentMonth(date.getMonth());
         setCurrentDay(new Date(date));
-        console.log(currentMonth, currentDay, currentRange);
+        setCurrentMonth(date.getMonth());
     };
-
-    useEffect(() => {
-        handleRangeChange();
-        startLoadingEvents(currentRange.start, currentRange.end);
-    }, []);
-    
     
     useEffect(() => {
         handleRangeChange();
+    }, [currentDay, handleRangeChange]);
+    
+    useEffect(() => {
         startLoadingEvents(currentRange.start, currentRange.end);
-    }, [cm]);
+    }, [currentRange]);
     
     return (
         <>
