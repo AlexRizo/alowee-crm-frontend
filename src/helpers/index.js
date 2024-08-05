@@ -4,3 +4,4 @@ export * from './getEnvVariables';
 export * from './fireModal';
 export * from './convertDateEvent';
 export * from './validateFile';
+export * from './validateCheckboxes';

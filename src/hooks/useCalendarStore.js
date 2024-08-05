@@ -54,7 +54,7 @@ export const useCalendarStore = () => {
 
         for (const key in postData) {
             if (key === 'file') {
-                postFormData.append('file', postData.file[0]);
+                if (postData.file) postFormData.append('file', postData.file[0]);
             } else if (key === 'socialNetworks') {
                 postFormData.append('socialNetworks', JSON.stringify(postData.socialNetworks));
             } else if (key === 'deadline') {
@@ -105,7 +105,6 @@ export const useCalendarStore = () => {
         for (const key in designData) {
             if (key === 'file') {
                 if (designData.file) DesignFormData.append('file', designData.file[0]);
-            
             } else if (key === 'printSize') {
                 DesignFormData.append('printSize', JSON.stringify(designData.printSize));
             } else if (key === 'deadline') {

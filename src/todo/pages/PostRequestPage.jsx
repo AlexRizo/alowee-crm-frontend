@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker, { registerLocale } from "react-datepicker"
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
 import { useCalendarStore, useUiStore } from "../../hooks";
-import { fireModal, validateFile } from "../../helpers";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { ErrorComponent } from "../components";
+import { fireModal, validateCheckboxes, validateFile } from "../../helpers";
+import { ErrorComponent, InformationComponent } from "../components";
 
 registerLocale('es', es);
 
@@ -14,29 +13,15 @@ export const PostRequestPage = () => {
     const { startSavingPost, message } = useCalendarStore();
     const { isCheckingForm } = useUiStore();
 
-    const [socialNetworkError, setSocialNetworkError] = useState('');
-
-    const { control, register, handleSubmit, formState: { errors } } = useForm();
+    const { control, register, handleSubmit, formState: { errors }, watch } = useForm();
+    
+    const socialNetworks = watch('socialNetworks');
 
     const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);
 
-    const validateCheckbox = (array = []) => {
-        const selectedNetworks = array.filter(network => network);
-    
-        if (selectedNetworks.length === 0) {
-          setSocialNetworkError('Selecciona al menos una red social');
-          return false;
-        }
-    
-        setSocialNetworkError('');
-        return true;
-    };
-
     const onSubmit = handleSubmit((data) => {
-        const { facebook, instagram, otro, ...newData } = data;
-        if (!validateCheckbox([facebook, instagram, otro])) return;
-        newData.socialNetworks = [facebook, instagram, otro].filter(network => network);
-        startSavingPost(newData);
+        console.log({data});
+        startSavingPost(data);
     });
     
     useEffect(() => {
@@ -46,9 +31,10 @@ export const PostRequestPage = () => {
     }, [message]);
 
     return (
-        <>
-            <h1 className="text-center text-3xl mb-5">Nueva Solicitud de Publicación</h1>
-            <form className="flex flex-col gap-5 max-w-screen-lg m-auto" onSubmit={ onSubmit }>
+        <div className="bg-white w-full p-6 rounded shadow container mx-auto">
+            <h1 className="text-xl font-medium">Solicitud de Publicación</h1>
+            <p className="text-gray-600 mb-6">Compártenos los detalles de la plublicación</p>
+            <form className="flex flex-col gap-5" onSubmit={ onSubmit }>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="title">Título de la Publicación</label>
                     <input 
@@ -155,19 +141,22 @@ export const PostRequestPage = () => {
                 <div className="flex flex-col gap-1 w-full">
                     <p>Redes Sociales</p> 
                     <div className="flex gap-2">
-                        <input onClick={ () => setSocialNetworkError('') } type="checkbox" name="Facebook" id="Facebook" value="facebook" {...register('facebook') } />
+                        <input type="checkbox" name="Facebook" id="Facebook" value="facebook" {...register('socialNetworks', { validate: validateCheckboxes }) } />
                         <label htmlFor="Facebook" className="mr-2 text-gray-700">Facebook</label>
                     </div> 
                     <div className="flex gap-2">
-                        <input onClick={ () => setSocialNetworkError('') } type="checkbox" name="Instagram" id="Instagram" value="instagram" {...register('instagram')} />
+                        <input type="checkbox" name="Instagram" id="Instagram" value="instagram" {...register('socialNetworks', { validate: validateCheckboxes })} />
                         <label htmlFor="Instagram" className="mr-2 text-gray-700">Instagram</label>
                     </div>
                     <div className="flex gap-2">
-                        <input onClick={ () => setSocialNetworkError('') } type="checkbox" name="Otro" id="Otro" value="otro" {...register('otro')} />
+                        <input type="checkbox" name="Otro" id="Otro" value="otro" {...register('socialNetworks', { validate: validateCheckboxes })} />
                         <label htmlFor="Otro" className="mr-2 text-gray-700">Otro</label>
                     </div>
                     {
-                        socialNetworkError && <ErrorComponent error={ socialNetworkError } />
+                        socialNetworks?.includes('otro') && <InformationComponent info="Por favor, especifica la red social en el siguiente campo" />
+                    }
+                    {
+                        errors.socialNetworks && <ErrorComponent error="selecciona al menos una opción" />
                     }
                 </div>
                 <div className="flex flex-col gap-1 w-full">
@@ -189,11 +178,13 @@ export const PostRequestPage = () => {
                         rows={ 5 }
                     />
                     {
-                        errors.description && <ErrorComponent error={ errors.description } />
+                        errors.description && <ErrorComponent error={ errors.description.message } />
                     }
                 </div>
-                <button className="p-4 bg-indigo-800/90 rounded hover:bg-indigo-600 focus:bg-indigo-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
+                <div className="flex justify-end">
+                    <button className="py-2 px-4 bg-sky-600 rounded-sm hover:bg-sky-600/90 focus:bg-sky-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
+                </div>
             </form>
-        </>
+        </div>
     )
 }

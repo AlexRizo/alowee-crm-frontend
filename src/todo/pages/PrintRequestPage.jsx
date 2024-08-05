@@ -329,7 +329,7 @@ export const PrintRequestPage = () => {
                     </p>
                 </div>
                 <div className="flex justify-end">
-                    <button className="py-2 px-4 bg-sky-600 rounded hover:bg-sky-600/90 focus:bg-sky-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
+                    <button className="py-2 px-4 bg-sky-600 rounded-sm hover:bg-sky-600/90 focus:bg-sky-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
                 </div>
             </form>
         </div>

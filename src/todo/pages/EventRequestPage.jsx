@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import DatePicker, { registerLocale } from "react-datepicker"
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
-import { addHours } from "date-fns";
 import { useCalendarStore, useUiStore } from "../../hooks";
-import { fireModal } from "../../helpers";
+import { fireModal, validateCheckboxes } from "../../helpers";
 import { Controller, useForm } from "react-hook-form";
 import { ErrorComponent } from "../components";
 
@@ -20,10 +19,6 @@ export const EventRequestPage = () => {
 
     const startDate = watch('start');
 
-    const validateCheckboxes = (value = []) => {
-        return value.length > 0; 
-    };
-
     const onSubmit = handleSubmit((data) => {
         console.log({data});
         
@@ -38,8 +33,8 @@ export const EventRequestPage = () => {
     
     return (
         <div className="bg-white w-full p-6 rounded shadow container mx-auto">
-            <h1 className="text-xl font-medium">Solicitud de Diseño para Impresión</h1>
-            <p className="text-gray-600 mb-6">Compártenos los detalles de la solicitud para impresión</p>
+            <h1 className="text-xl font-medium">Solicitud de Evento</h1>
+            <p className="text-gray-600 mb-6">Compártenos los detalles del evento</p>
             <form className="flex flex-col gap-5" onSubmit={ onSubmit }>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="title">Evento</label>
