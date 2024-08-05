@@ -28,8 +28,8 @@ export const LoginPage = () => {
     
     return (
         <div className="max-w-md m-auto mt-20">
-            <h1 className="text-3xl font-bold text-center mb-1">Ingresar</h1>
-            <p className='text-center mb-6 text-gray-600'>Ingresa tus datos para ingresar al sistema</p>
+            <h1 className="text-3xl font-bold text-center mb-1">Iniciar Sesión</h1>
+            <p className='text-center mb-6 text-gray-600'>Ingresa tus datos para acceder al sistema</p>
             <form onSubmit={ loginSubmit } className="font-light">
                 <div className="flex flex-col gap-1 mb-3">
                     <label htmlFor='email'>Correo electrónico</label>

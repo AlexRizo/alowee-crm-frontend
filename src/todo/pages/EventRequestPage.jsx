@@ -5,7 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { addHours } from "date-fns";
 import { useCalendarStore, useUiStore } from "../../hooks";
 import { fireModal } from "../../helpers";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { ErrorComponent } from "../components";
 
 registerLocale('es', es);
 
@@ -15,78 +16,19 @@ export const EventRequestPage = () => {
 
     const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);
 
-    const { control, register, handleSubmit, formState: { errors } } = useForm();
+    const { control, register, handleSubmit, formState: { errors }, watch } = useForm();
 
-    const [formValidation, setFormValidation] = useState({
-        title: null,
-        start: null,
-        end: null,
-        requiriments: null,
-        description: null
-    });
-    
-    const onInputChange = ({ target }) => {
-        setFormValues({
-            ...formValues,
-            [target.name]: target.value
-        });
-    }
+    const startDate = watch('start');
 
-    const onCheckboxChange = ({ target }) => {
-        if (target.checked) {
-            setFormValues({
-                ...formValues,
-                requiriments: [
-                    ...formValues.requiriments,
-                    target.value
-                ]
-            });
-        } else {
-            setFormValues({
-                ...formValues,
-                requiriments: formValues.requiriments.filter(req => req !== target.value)
-            });
-        }
-    }
-
-    const onDateChange = (event, changing) => {
-        setFormValues({
-            ...formValues,
-            [changing]: event
-        });
-    }
+    const validateCheckboxes = (value = []) => {
+        return value.length > 0; 
+    };
 
     const onSubmit = handleSubmit((data) => {
-
-        const { title, start, end, requiriments, description } = formValues;
-
-        const errors = {
-            title: title.trim() === '' ? 'El título es obligatorio' : null,
-            start: start > end ? 'La fecha de inicio no puede ser mayor a la fecha de finalización' 
-                : !start ? 'La fecha de inicio es obligatoria'
-                : start < new Date() ? 'La fecha de inicio no puede ser menor a la fecha actual'
-                : null,
-            end: end < start ? 'La fecha de finalización no puede ser menor a la fecha de inicio'
-                : !end ? 'La fecha de finalización es obligatoria'
-                : null,
-            requiriments: requiriments.length === 0 ? 'Debes seleccionar al menos un requerimiento' : null,
-            description: description.trim() === '' ? 'La descripción es obligatoria' : null
-        }
-
-        if (Object.values(errors).some(error => error !== null)) {
-            setFormValidation(errors);
-            return;
-        }
-
-        startSavingEvent(formValues);
+        console.log({data});
+        
+        startSavingEvent(data);
     })
-
-    const cleanError = (target) => {
-        setFormValidation({
-            ...formValidation,
-            [target]: null
-        });
-    }
 
     useEffect(() => {
         if(message !== undefined) {
@@ -95,93 +37,160 @@ export const EventRequestPage = () => {
     }, [message]);
     
     return (
-        <>
-            <h1 className="text-center text-3xl mb-5">Nuevo Evento</h1>
-            <form className="flex flex-col gap-5 max-w-screen-lg m-auto" onSubmit={ onSubmit }>
+        <div className="bg-white w-full p-6 rounded shadow container mx-auto">
+            <h1 className="text-xl font-medium">Solicitud de Diseño para Impresión</h1>
+            <p className="text-gray-600 mb-6">Compártenos los detalles de la solicitud para impresión</p>
+            <form className="flex flex-col gap-5" onSubmit={ onSubmit }>
                 <div className="flex flex-col gap-1">
-                    <label htmlFor="title">Evento *</label>
+                    <label htmlFor="title">Evento</label>
                     <input 
-                        onBlur={ () => cleanError('title')}
-                        className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition ${ !!formValidation.title && 'outline outline-red-500 transition' }`}
+                        className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition`}
                         type="text"
                         name="title"
                         id="title"
                         placeholder="Nombre del evento"
-                        onChange={ onInputChange }
-                        value={ formValues.title }
+                        { ...register('title', {
+                            required: {
+                                value: true,
+                                message: 'Este campo es obligatorio'
+                            },
+                            maxLength: {
+                                value: 50,
+                                message: 'Sólo se permiten 50 caracteres'
+                            }
+                        }) }
                     />
-                    <p className={`text-red-500 text-sm transition ${!!formValidation.title ? '' : 'hidden' }`}>* { formValidation.title }</p>
+                    { errors.title && <ErrorComponent error={ errors.title.message } /> }
                 </div>
                 <div className="flex gap-4">
                     <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="start">Fecha de Inicio *</label> 
-                        <DatePicker
-                            onBlur={() => cleanError('start')}
-                            className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition ${ !!formValidation.start && 'outline outline-red-500' }`}
-                            placeholderText="Fecha de inicio del evento"
-                            dateFormat='Pp'
-                            showTimeSelect
-                            locale='es'
-                            timeCaption="Hora"
-                            selected={ formValues.start }
-                            onChange={ (event) => onDateChange(event, 'start') }
+                        <label htmlFor="start">Fecha de Inicio</label>
+                        <Controller
+                            control={ control }
+                            name="start"
+                            rules={{ 
+                                required: {
+                                    value: true,
+                                    message: 'La fecha de inicio es obligatoria'
+                                },
+                                validate: (value) => value > new Date() || 'A caso tienes una máquina del tiempo?'
+                            }}
+                            render={({ field }) => (
+                                <DatePicker
+                                    className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition`}
+                                    placeholderText="Fecha de inicio del evento"
+                                    dateFormat='Pp'
+                                    showTimeSelect
+                                    locale='es'
+                                    timeCaption="Hora"
+                                    minDate={ new Date() }
+                                    onChange={ (event) => field.onChange(event) }
+                                    selected={ field.value }
+                                />
+                            )}
                         />
-                        <p className={`text-red-500 text-sm transition ${!!formValidation.start ? '' : 'hidden' }`}>* { formValidation.start }</p>
+                        { errors.start && <ErrorComponent error={ errors.start.message } /> }
                     </div>
                     <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="end">Fecha de Finalización *</label> 
-                        <DatePicker
-                            onBlur={() => cleanError('end')}
-                            className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition ${ !!formValidation.end && 'outline outline-red-500' }`}
-                            placeholderText="Fecha de finalización del evento"
-                            dateFormat='Pp'
-                            showTimeSelect
-                            locale='es'
-                            timeCaption="Hora"
-                            selected={ formValues.end }
-                            minDate={ formValues.start }
-                            onChange={ (event) => onDateChange(event, 'end') }
+                        <label htmlFor="end">Fecha de Finalización</label> 
+                        <Controller
+                            control={ control }
+                            name="end"
+                            rules={{ 
+                                required: {
+                                    value: true,
+                                    message: 'La fecha de finalización es obligatoria'
+                                },
+                                validate: (value) => value > new Date() || 'A caso tienes una máquina del tiempo?'
+                            }}
+                            render={({ field }) => (
+                                <DatePicker
+                                    className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition`}
+                                    placeholderText="Fecha de finalización del evento"
+                                    dateFormat='Pp'
+                                    showTimeSelect
+                                    locale='es'
+                                    timeCaption="Hora"
+                                    selected={ field.value }
+                                    minDate={ startDate }
+                                    onChange={ (event) => field.onChange(event) }
+                                />
+                            )}
                         />
-                        <p className={`text-red-500 text-sm transition ${!!formValidation.end ? '' : 'hidden' }`}>* { formValidation.end }</p>
+                        { errors.end && <ErrorComponent error={ errors.end.message } /> }
                     </div>
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                    <p>Requerimientos *</p> 
+                    <p>Requerimientos</p> 
                     <div className="flex gap-2">
-                        <input onClick={ () => cleanError('requiriments') } type="checkbox" name="fotografia" id="fotografia" value="fotografia" onChange={ onCheckboxChange } />
+                        <input 
+                            type="checkbox"
+                            name="fotografia"
+                            id="fotografia"
+                            value="fotografia"
+                            {...register("requiriments", { validate: validateCheckboxes })}    
+                        />
                         <label htmlFor="fotografia" className="mr-2 text-gray-900">Fotografía</label>
                     </div>
                     <div className="flex gap-2">
-                        <input onClick={ () => cleanError('requiriments') } type="checkbox" name="Video" id="Video" value="video" onChange={ onCheckboxChange } />
+                        <input 
+                            type="checkbox"
+                            name="Video"
+                            id="Video"
+                            value="video"
+                            {...register("requiriments", { validate: validateCheckboxes })}    
+                        />
                         <label htmlFor="Video" className="mr-2 text-gray-700">Video</label>
                     </div>
                     <div className="flex gap-2">
-                        <input onClick={ () => cleanError('requiriments') } type="checkbox" name="Reel" id="Reel" value="reel" onChange={ onCheckboxChange } />
+                        <input 
+                            type="checkbox"
+                            name="Reel"
+                            id="Reel"
+                            value="reel"
+                            {...register("requiriments", { validate: validateCheckboxes })}    
+                        />
                         <label htmlFor="Reel" className="mr-2 text-gray-700">Reel</label>
                     </div>
                     <div className="flex gap-2">
-                        <input onClick={ () => cleanError('requiriments') } type="checkbox" name="Transmicion" id="Transmicion" value="transmicion" onChange={ onCheckboxChange } />
+                        <input 
+                            type="checkbox"
+                            name="Transmicion"
+                            id="Transmicion"
+                            value="transmicion"
+                            {...register("requiriments", { validate: validateCheckboxes })}    
+                        />
                         <label htmlFor="Transmicion" className="mr-2 text-gray-700">Transmisión en Vivo</label>
                     </div>
-                    <p className={`text-red-500 text-sm transition ${!!formValidation.requiriments ? '' : 'hidden' }`}>* { formValidation.requiriments }</p>
+                    { errors.requiriments && <ErrorComponent error="Selecciona al menos una opción" /> }
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                        <label htmlFor="description">Descripción de la Solicitud *</label> 
-                        <textarea
-                            onBlur={ () => cleanError('description')}
-                            className={`${ !!formValidation.description && 'outline outline-red-500' } p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
-                            name="description"
-                            id="description"
-                            placeholder="Descripción de la solicitud"
-                            rows={ 10 }
-                            maxLength={ 1020 }
-                            onChange={ onInputChange }
-                            value={ formValues.description }
-                        />
-                        <p className={`text-red-500 text-sm transition ${!!formValidation.description ? '' : 'hidden' }`}>* { formValidation.description }</p>
-                    </div>
-                    <button className="p-4 bg-indigo-800/90 rounded hover:bg-indigo-600 focus:bg-indigo-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
+                    <label htmlFor="description">Descripción de la Solicitud</label> 
+                    <textarea
+                        onBlur={ () => cleanError('description')}
+                        className={`p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition resize-none`}
+                        name="description"
+                        id="description"
+                        placeholder="Descripción de la solicitud"
+                        rows={ 10 }
+                        maxLength={ 1020 }
+                        { ...register('description', {
+                            required: {
+                                value: true,
+                                message: 'Este campo es obligatorio'
+                            },
+                            maxLength: {
+                                value: 1020,
+                                message: 'Sólo se permiten 1020 caracteres'
+                            }
+                        }) }
+                    />
+                    { errors.description && <ErrorComponent error={ errors.description.message } /> }
+                </div>
+                <div className="flex justify-end">
+                    <button className="py-2 px-4 bg-sky-600 rounded hover:bg-sky-600/90 focus:bg-sky-700 transition text-white" disabled={ isCheckingData } >Enviar Solicitud</button>
+                </div>
             </form>
-        </>
+        </div>
     )
 }

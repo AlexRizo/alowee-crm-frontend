@@ -47,12 +47,12 @@ export const CalendarPage = () => {
     };
 
     const eventTypeStart = (event) => {
-        const start = event.type === 'event' ? event.start : event.deadline;
+        const start = event.type === 'evento' ? event.start : event.deadline;
         return start;
     }
 
     const eventTypeEnd = (event) => {
-        const end = event.type === 'event' ? event.end : event.deadline;
+        const end = event.type === 'evento' ? event.end : event.deadline;
         return end;
     }
 

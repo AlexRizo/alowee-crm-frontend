@@ -29,7 +29,7 @@ export const CalendarModal = () => {
             closeTimeoutMS={ 200 }
         >
             {
-                activeEvent?.type === 'event' ? <EventModal data={ activeEvent } />
+                activeEvent?.type === 'evento' ? <EventModal data={ activeEvent } />
                 : <RequestModal data={ activeEvent } />
             }
             <div className='flex gap-2 justify-end'>
