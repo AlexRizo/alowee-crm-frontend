@@ -7,3 +7,4 @@ export * from './PrintRequestPage';
 export * from './DigitalRequestPage';
 export * from './TshirtRequestPage';
 export * from './OtherRequestPage';
+export * from './TaskPage';

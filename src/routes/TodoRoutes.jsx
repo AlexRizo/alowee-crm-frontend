@@ -7,7 +7,8 @@ import {
     RequestPage,
     DigitalRequestPage,
     TshirtRequestPage,
-    OtherRequestPage
+    OtherRequestPage,
+    TaskPage
 } from "../todo/pages";
 import { TodoLayout } from "../todo/layout/TodoLayout";
 import { Navigate } from "react-router-dom";
@@ -52,6 +53,10 @@ export const TodoRoutes = [
             {
                 path: '/requests/new-design/other',
                 element: <OtherRequestPage />
+            },
+            {
+                path: '/task/:id/preview',
+                element: <TaskPage />
             }
         ]
     },

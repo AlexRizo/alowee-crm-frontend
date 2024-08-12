@@ -3,6 +3,7 @@ import { useUiStore } from "../../hooks";
 import { useSelector } from 'react-redux';
 import { EventModal } from './EventModal';
 import { RequestModal } from './RequestModal';
+import { NavLink } from 'react-router-dom';
 
 export const CalendarModal = () => {
     const { isModalOpen, closeModal } = useUiStore();
@@ -33,7 +34,12 @@ export const CalendarModal = () => {
                 : <RequestModal data={ activeEvent } />
             }
             <div className='flex gap-2 justify-end'>
-                <button className='border border-gray-300 rounded outline-none p-2 hover:bg-gray-100 transition'>Ir al evento</button>
+                <NavLink 
+                    to={`/task/${ activeEvent?.id }/preview`} 
+                    className='border border-gray-300 rounded outline-none p-2 hover:bg-gray-100 transition'
+                >
+                    Ir al evento
+                </NavLink>
                 <button className='rounded outline-none p-2 bg-black text-white hover:bg-black/80 transition' onClick={closeModal}>Cerrar</button>
             </div>
         </Modal>
