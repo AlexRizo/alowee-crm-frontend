@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { AppRouter } from "./routes"
 import { useAuthStore } from "./hooks";
 import { useEffect } from "react";
+import { LoadingComponent } from "./todo/components";
 
 export const AloweeApp = () => {
     // const { status:authStatus } = useSelector(state => state.auth);
@@ -12,9 +13,7 @@ export const AloweeApp = () => {
     }, []);
 
     if (status === 'checking') {
-        return (
-            <h1>Cargando...</h1>
-        )
+        return (<LoadingComponent />);
     }
     
     return <RouterProvider router={ createBrowserRouter(AppRouter(status)) } />

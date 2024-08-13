@@ -8,7 +8,6 @@ export const EventModal = ({ data }) => {
 
     const isRetarded = () => {
         if (new Date(data.end) < new Date() && !data.status) return true;
-        console.log({ status: data.status });
         return false;
     };
     

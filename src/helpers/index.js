@@ -5,4 +5,3 @@ export * from './fireModal';
 export * from './convertDateEvent';
 export * from './validateFile';
 export * from './validateCheckboxes';
-export * from './loadPreviewTask';

@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-export const fireModal = ({ title = '', text = '', icon = 'error' }) => {
+export const fireModal = ({ title = '', text = '', icon = '' }) => {
     Swal.fire({
         title,
         html: text,

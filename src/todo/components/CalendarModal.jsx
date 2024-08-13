@@ -35,7 +35,7 @@ export const CalendarModal = () => {
             }
             <div className='flex gap-2 justify-end'>
                 <NavLink 
-                    to={`/task/${ activeEvent?.id }/preview`} 
+                    to={`/task/${ activeEvent?.id }/preview?type=${ activeEvent?.type }`} 
                     className='border border-gray-300 rounded outline-none p-2 hover:bg-gray-100 transition'
                 >
                     Ir al evento

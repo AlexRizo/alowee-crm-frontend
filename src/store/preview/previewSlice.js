@@ -18,4 +18,4 @@ export const previewSlice = createSlice({
     },
 });
 
-export const { increment, decrement, incrementBy } = previewSlice.actions;
+export const { toggleIsLoadingPreview, setPreviewTask } = previewSlice.actions;
