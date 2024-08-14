@@ -166,7 +166,6 @@ export const PrintRequestPage = () => {
         setValue('ySize', '');
         
         setPrintType(target.value)
-        console.log(printType)
     }
 
     return (

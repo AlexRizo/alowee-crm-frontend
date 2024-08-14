@@ -6,7 +6,6 @@ export const RequestModal = ({ data }) => {
 
     const isRetarded = () => {
         if (new Date(data.deadline) < new Date() && !data.status) return true;
-        console.log({ status: data.status });
         return false;
     };
     

@@ -12,7 +12,6 @@ export const useValidateForm = ( formData = {}) => {
 
     const isFormValid = () => {
         const { user, ...restFormState } = formState;
-        console.log(restFormState);
         
         for (const key in restFormState) {
             if (Object.hasOwnProperty.call(restFormState, key)) {

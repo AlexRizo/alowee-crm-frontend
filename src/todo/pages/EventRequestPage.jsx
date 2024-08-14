@@ -20,8 +20,6 @@ export const EventRequestPage = () => {
     const startDate = watch('start');
 
     const onSubmit = handleSubmit((data) => {
-        console.log({data});
-        
         startSavingEvent(data);
     })
 

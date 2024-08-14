@@ -9,11 +9,11 @@ export const previewSlice = createSlice({
     name: 'preview',
     initialState,
     reducers: {
-        toggleIsLoadingPreview: (state) => {
-            state.isLoadingPreview = !state.isLoadingPreview;
+        toggleIsLoadingPreview: (state, { payload }) => {
+            state.isLoadingPreview = payload;
         },
-        setPreviewTask: (state, action) => {
-            state.previewTask = action.payload;
+        setPreviewTask: (state, { payload }) => {
+            state.previewTask = payload;
         }
     },
 });

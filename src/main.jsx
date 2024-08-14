@@ -6,9 +6,9 @@ import { store } from './store/store.js'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={ store }>
       <AloweeApp />
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )

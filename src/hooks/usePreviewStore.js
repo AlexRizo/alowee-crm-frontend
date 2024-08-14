@@ -7,25 +7,23 @@ export const usePreviewStore = () => {
     const dispatch = useDispatch();
 
     const loadPreviewTask = async(id = '', type = '') => {
-        dispatch(toggleIsLoadingPreview());
+        dispatch(toggleIsLoadingPreview(true)); 
         try {
             const { data } = await todoApi.get(`/events/${ id }?type=${ type }`);
-            dispatch(setPreviewTask(data.event));
-            setTimeout(() => {
-                dispatch(toggleIsLoadingPreview());
-            }, 2000);
+            const { _id, __v, ...rest } = data.event;
+            
+            dispatch(setPreviewTask({id: _id, ...rest}));
             return true;
         } catch (error) {
             console.error(error);
-            setTimeout(() => {
-                dispatch(toggleIsLoadingPreview());
-            }, 2000);
             fireModal({
                 title: 'Error',
                 text: error.response.data.message || 'Error al cargar la tarea',
                 icon: 'error'
             });
-            return ;
+            return false;
+        } finally {
+            setTimeout(() => dispatch(toggleIsLoadingPreview(false)), 2000);
         }
     }
 

@@ -20,7 +20,6 @@ export const PostRequestPage = () => {
     const isCheckingData = useMemo(() => isCheckingForm === true, [isCheckingForm]);
 
     const onSubmit = handleSubmit((data) => {
-        console.log({data});
         startSavingPost(data);
     });
     
