@@ -10,7 +10,6 @@ export const TaskPage = () => {
     const { previewTask, isLoadingPreview } = useSelector(state => state.preview);
     const { id } = useParams();
 
-    
     const isLoading = useMemo(() => isLoadingPreview === true, [isLoadingPreview]);
     
     useEffect(() => {
@@ -19,14 +18,16 @@ export const TaskPage = () => {
     }, []);
 
     if (isLoading) {        
-        return (<LoadingComponent />);;
+        return (<LoadingComponent />);
     }
-    
+
     return (
         <div className="animate__animated animate__fadeIn">
             <h1>Task Page</h1>
             
-            <TaskPreview />
+            {
+                previewTask?.id && (<TaskPreview task={ previewTask }/>)
+            }
         </div>
     )
 }

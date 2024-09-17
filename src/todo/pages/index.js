@@ -8,3 +8,4 @@ export * from './DigitalRequestPage';
 export * from './TshirtRequestPage';
 export * from './OtherRequestPage';
 export * from './TaskPage';
+export * from './ProfilePage';

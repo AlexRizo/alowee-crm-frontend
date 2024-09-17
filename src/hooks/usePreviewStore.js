@@ -23,7 +23,7 @@ export const usePreviewStore = () => {
             });
             return false;
         } finally {
-            setTimeout(() => dispatch(toggleIsLoadingPreview(false)), 2000);
+            dispatch(toggleIsLoadingPreview(false));
         }
     }
 

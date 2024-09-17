@@ -113,6 +113,27 @@ export const EventRequestPage = () => {
                         { errors.end && <ErrorComponent error={ errors.end.message } /> }
                     </div>
                 </div>
+                <div className="flex flex-col gap-1">
+                    <label htmlFor="location">Ubicación</label>
+                    <input 
+                        className={`w-full p-2 placeholder:text-gray-400 border focus:outline-none focus:ring-2 focus:ring-indigo-700 rounded transition`}
+                        type="text"
+                        name="location"
+                        id="location"
+                        placeholder="Ubicación del evento"
+                        { ...register('location', {
+                            required: {
+                                value: true,
+                                message: 'Este campo es obligatorio'
+                            },
+                            maxLength: {
+                                value: 100,
+                                message: 'Sólo se permiten 100 caracteres'
+                            }
+                        }) }
+                    />
+                    { errors.title && <ErrorComponent error={ errors.title.message } /> }
+                </div>
                 <div className="flex flex-col gap-1 w-full">
                     <p>Requerimientos</p> 
                     <div className="flex gap-2">
