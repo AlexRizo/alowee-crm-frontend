@@ -22,9 +22,7 @@ export const TaskPage = () => {
     }
 
     return (
-        <div className="animate__animated animate__fadeIn">
-            <h1>Task Page</h1>
-            
+        <div className="animate__animated animate__fadeIn flex flex-col items-center max-w-[700px] m-auto">            
             {
                 previewTask?.id && (<TaskPreview task={ previewTask }/>)
             }

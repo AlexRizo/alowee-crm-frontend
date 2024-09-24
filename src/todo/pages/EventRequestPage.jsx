@@ -169,12 +169,12 @@ export const EventRequestPage = () => {
                     <div className="flex gap-2">
                         <input 
                             type="checkbox"
-                            name="Transmicion"
-                            id="Transmicion"
-                            value="transmicion"
+                            name="Transmision"
+                            id="Transmision"
+                            value="transmision"
                             {...register("requiriments", { validate: validateCheckboxes })}    
                         />
-                        <label htmlFor="Transmicion" className="mr-2 text-gray-700">Transmisión en Vivo</label>
+                        <label htmlFor="Transmision" className="mr-2 text-gray-700">Transmisión en Vivo</label>
                     </div>
                     { errors.requiriments && <ErrorComponent error="Selecciona al menos una opción" /> }
                 </div>
