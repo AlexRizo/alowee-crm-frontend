@@ -30,8 +30,8 @@ export const TaskDescription = ({ title, requiriments, start, end, location, des
                     <h2 className="font-medium">Requerimientos:</h2>
                     <div className="pl-4">
                         {
-                            requiriments.map(req => (
-                                <p className="capitalize flex gap-2">
+                            requiriments.map((req, index) => (
+                                <p className="capitalize flex gap-2" key={index}>
                                     {
                                         req === 'fotografia'
                                         ? <CameraIcon height={20} />
